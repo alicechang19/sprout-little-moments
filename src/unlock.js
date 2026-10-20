@@ -6,10 +6,10 @@
 // reload. When it runs out there's a soft chime, the screen fades and the next box comes out on its own; the tab
 // title says so if they're elsewhere. ?break=10 makes every break 10 seconds long, for testing.
 import { BY_ID } from './data.js';
-import { isDark } from './util.js';
+import { isDark, testParams } from './util.js';
 
 export const FREE_BOXES = 1;
-const testSeconds = Number(new URLSearchParams(location.search).get('break'));
+const testSeconds = Number(testParams.get('break'));
 const FULL_SECONDS = 5 * 60, BREAK_SECONDS = testSeconds > 0 ? testSeconds : FULL_SECONDS;
 
 // body: what crosses the sky. extra: something small from the Sprout's own scene. sun: [core, glow] if not the usual.

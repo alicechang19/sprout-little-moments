@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { SERIES, BY_ID, SKY, LIGHTS } from './data.js';
-import { animate, tickTweens, ease, wait, motionScale, reducedMotion, isDark, storage, clamp, bell, glowTexture } from './util.js';
+import { animate, tickTweens, ease, wait, motionScale, reducedMotion, isDark, storage, clamp, bell, glowTexture, testParams } from './util.js';
 import { needsAct, setupBreaks, showBreak } from './unlock.js';
 import { BlindBox, BOX, loadBoxArt } from './box.js';
 import { Rig } from './rig.js';
@@ -97,7 +97,7 @@ const view = { target: new THREE.Vector3(0, 1.0, 0), dist: 8.6, elev: 0.2, ox: 0
 
 // ------------------------------------------------------------------ state
 const store = storage();
-const params = new URLSearchParams(location.search);
+const params = testParams; // ?sprout, ?tell and ?debug, on this computer only
 const state = {
   mode: 'loading', // ring | box | opening | reveal | busy | finale
   current: null, rig: null, env: null, diorama: null,
@@ -249,7 +249,8 @@ const say = (msg) => { ui.announce.textContent = msg; };
 /**
  * What's in the box, and whether it shows the rare tell, is decided by the server (api/pick.js) once the
  * strip is torn, so neither the odds nor the contents show up in the page or its network requests beforehand. ?sprout=<id> still forces one (for
- * testing); if the server can't be reached, it falls back to an even pick so the box still opens.
+ * testing, on this computer only). If the server can't be reached, the box still opens with an even pick of the
+ * others: never the rare one, so blocking the request can't be used to fish for it.
  */
 async function pickSprout() {
   if (state.forced && BY_ID[state.forced]) {
@@ -265,8 +266,8 @@ async function pickSprout() {
     throw new Error(`unexpected answer: ${id}`);
   } catch (err) {
     console.warn('Could not reach /api/pick, picking evenly instead.', err);
-    const id = SERIES[Math.floor(Math.random() * SERIES.length)].id;
-    return { id, tell: id === 'light' || Math.random() < 0.1 };
+    const pool = SERIES.filter((s) => s.id !== 'light');
+    return { id: pool[Math.floor(Math.random() * pool.length)].id, tell: Math.random() < 0.1 };
   }
 }
 

@@ -1,6 +1,7 @@
 // The garden follows the real sky where the viewer is: dawn from sunrise to sunset, dusk the rest of the time
 // (the small hours included). Sunset comes from the browser's time zone, mapped to a representative city, so
 // there's no location prompt. ?sky=dawn or ?sky=dusk forces either look for testing.
+import { testParams } from './util.js';
 
 // time zone → a representative city (latitude, longitude east-positive)
 const TZ = {
@@ -40,7 +41,7 @@ export function sunTimes(date, lat, lon) {
   return { rise: toDate(transit - w / 360), set: toDate(transit + w / 360) };
 }
 
-const forced = new URLSearchParams(location.search).get('sky');
+const forced = testParams.get('sky');
 
 /** 'dawn' between sunrise and sunset, 'dusk' otherwise. */
 export function skyLook(now = new Date()) {

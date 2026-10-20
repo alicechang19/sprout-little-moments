@@ -15,7 +15,8 @@ npm run dev
 Opens on http://localhost:5179 (`PORT` changes it). It serves the site and runs `api/pick.js` the way Vercel does.
 Opening `index.html` straight from disk won't work, because the page loads modules and calls `/api/pick`.
 
-Handy URL switches for testing:
+Handy URL switches for testing. They only work on `localhost`; the live site ignores them, so nobody can use
+them to pick a Sprout or skip a break.
 
 | | |
 |---|---|

@@ -1,5 +1,10 @@
 import * as THREE from 'three';
 
+// The URL switches for testing (?sprout, ?tell, ?break, ?sky, ?demo, ?debug) only work on this computer,
+// so nobody can use them on the live site to pick a Sprout or skip a break.
+const local = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
+export const testParams = new URLSearchParams(local ? location.search : '');
+
 export const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 export const motionScale = () => (reducedMotion.matches ? 0.45 : 1);
 
@@ -97,7 +102,7 @@ export function isDark() {
 export function storage() {
   const KEY = 'sprout-little-moments-s01', PHOTO_KEY = 'sprout-s01-photo';
   // ?demo: a fresh collection with no breaks, kept only in memory, so trying things never touches the real one
-  if (new URLSearchParams(location.search).has('demo')) {
+  if (testParams.has('demo')) {
     let photo = null;
     return { load: () => ({ counts: {}, unlocks: 999 }), save() {}, photo: () => photo, savePhoto(url) { photo = url; } };
   }

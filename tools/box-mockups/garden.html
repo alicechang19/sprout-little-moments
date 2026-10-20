@@ -1,0 +1,291 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Garden at dawn</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Figtree:wght@400;500;600;700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..800,100;1,9..144,400..600,100&display=swap">
+<style>
+/* Garden at dawn, developed: the six Sprouts are stills rendered from the app's own models (renders/*.png),
+   with four options each for the second side and the back. Same carton and tear strip as the app. */
+:root {
+  --ground: #eeebe3; --paper: #fbf9f4; --ink: #1b2046; --ink-soft: #565c7c; --line: rgba(27, 32, 70, .12);
+  --sky: #2c5f8a;
+  --display: "Fraunces", Georgia, serif; --body: "Figtree", system-ui, sans-serif; --mono: "DM Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 15px/1.55 var(--body); -webkit-font-smoothing: antialiased; }
+main { max-width: 1240px; margin: 0 auto; padding: 48px 24px 96px; }
+h1 { margin: 0; font: 650 44px/1 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; letter-spacing: -.015em; }
+.lede { margin: 12px 0 0; max-width: 70ch; color: var(--ink-soft); text-wrap: pretty; }
+.card { margin-top: 48px; background: var(--paper); border-radius: 28px; box-shadow: 0 0 0 1px var(--line), 0 30px 60px -40px rgba(27,32,70,.35); overflow: hidden; }
+.card > header { padding: 28px 32px 0; }
+.card h2 { margin: 0; font: 650 30px/1.05 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; letter-spacing: -.01em; }
+.card > header p { margin: 8px 0 0; color: var(--ink-soft); max-width: 72ch; text-wrap: pretty; }
+.top { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+.hero { min-height: 470px; display: grid; place-items: center; background: #e7f0f6; }
+.hero > svg { width: min(500px, 96%); height: auto; overflow: visible; }
+svg svg { overflow: hidden; }
+.base { padding: 28px 32px; display: grid; grid-template-columns: 200fr 130fr 130fr 200fr; gap: 14px; align-content: center; align-items: end; }
+.opts { display: grid; gap: 22px; padding: 22px 32px 32px; }
+.opts.sides { grid-template-columns: repeat(4, 1fr); }
+.opts.backs { grid-template-columns: repeat(4, 1fr); }
+figure { margin: 0; }
+figure svg { width: 100%; height: auto; display: block; border-radius: 6px; box-shadow: 0 0 0 1px var(--line); }
+.opts.sides figure svg { max-width: 220px; margin: 0 auto; }
+.label { margin-top: 12px; display: grid; gap: 4px; }
+.label b { font: 600 16px/1.2 var(--display); font-variation-settings: "SOFT" 100, "opsz" 36; }
+.label .k { font: 500 10.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
+.label span:last-child { font-size: 13.5px; color: var(--ink-soft); text-wrap: pretty; }
+figcaption.small { margin-top: 8px; font: 500 10.5px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); }
+@media (max-width: 1000px) { .top { grid-template-columns: 1fr; } .opts.sides, .opts.backs { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .base { grid-template-columns: 1fr 1fr; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="drop" viewBox="0 0 34 42"><path fill="currentColor" d="M17 1C24 9 31 17 31 25.5A14 14 0 0 1 3 25.5C3 17 10 9 17 1Z"/></symbol>
+  <radialGradient id="shadow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#1b2046" stop-opacity=".24"/><stop offset="1" stop-color="#1b2046" stop-opacity="0"/></radialGradient>
+  <filter id="whiteout" x="-20%" y="-20%" width="140%" height="140%"><feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0" result="w"/><feGaussianBlur in="w" stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="w"/></feMerge></filter>
+  <pattern id="pebbles" width="16" height="12" patternUnits="userSpaceOnUse"><rect width="16" height="12" fill="#a5774d"/><ellipse cx="4" cy="3" rx="1.6" ry="1" fill="#8d6340"/><ellipse cx="12" cy="8" rx="1.2" ry=".8" fill="#b98a5d"/><circle cx="9" cy="2" r=".6" fill="#7a5436"/></pattern>
+  <radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#e9ffb8" stop-opacity=".9"/><stop offset="1" stop-color="#e9ffb8" stop-opacity="0"/></radialGradient>
+</defs></svg>
+
+<main>
+  <h1>Garden at dawn</h1>
+  <p class="lede">The chosen design, with the Sprouts as stills rendered from the actual models in the app: a Sprout peeking over the hill on the front, the lineup side, one big Sprout on the second side, and the Sprouts at home in their garden on the back.</p>
+  <section class="card" id="box"></section>
+</main>
+
+<script>
+const FW = 200, SW = 130, H = 260, STRIP_Y = 30, STRIP_H = 17;
+const SPROUTS = [
+  { id: 'daydream', n: '01', name: 'Daydream', value: 'Wonder', tint: '#cdd8f3', quote: 'The best thoughts show up when you stop looking for them.' },
+  { id: 'read', n: '02', name: 'Read', value: 'Curiosity', tint: '#f1dcc0', quote: 'Every page is a door I haven’t opened yet.' },
+  { id: 'rest', n: '03', name: 'Rest', value: 'Rest', tint: '#d9d4ee', quote: 'Resting is part of growing.' },
+  { id: 'explore', n: '04', name: 'Explore', value: 'Adventure', tint: '#e3ebc9', quote: 'Let’s go see what’s over there.' },
+  { id: 'cheer', n: '05', name: 'Cheer', value: 'Joy', tint: '#f6d8cf', quote: 'Tiny wins deserve a tiny parade.' },
+  { id: 'light', n: '06', name: 'Little Light', value: 'Quiet kindness', tint: '#3a4070', quote: 'You don’t have to be loud to light the way.' },
+];
+// a render, placed by its feet: renders are 600 x 760, the figure fills most of the frame
+const img = (id, cx, footY, h) => { const w = h * 600 / 760; return `<image href="renders/${id}.png" x="${cx - w / 2}" y="${footY - h}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet"/>`; };
+let uid = 0;
+const sky = (w, top = '#a9d6f5', mid = '#fde6d3', bottom = '#fff1df') => { const id = `sky${uid++}`; return `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${top}"/><stop offset=".62" stop-color="${mid}"/><stop offset="1" stop-color="${bottom}"/></linearGradient></defs><rect width="${w}" height="${H}" fill="url(#${id})"/>`; };
+const cloud = (x, y, s = 1, o = 1, c = '#fff') => `<g transform="translate(${x} ${y}) scale(${s})" fill="${c}" opacity="${o}"><ellipse cx="0" cy="0" rx="22" ry="11"/><ellipse cx="14" cy="-7" rx="14" ry="11"/><ellipse cx="-12" cy="-4" rx="11" ry="9"/></g>`;
+const hills = (w, y1, y2, c1 = '#9edaa9', c2 = '#5fbf7a') => `<path d="M0 ${y1} C${w * .3} ${y1 - 26} ${w * .6} ${y1 + 8} ${w} ${y1 - 14} V${H} H0Z" fill="${c1}"/><path d="M0 ${y2} C${w * .35} ${y2 - 18} ${w * .7} ${y2 + 14} ${w} ${y2 - 6} V${H} H0Z" fill="${c2}"/>`;
+// a scattered night sky that stays clear of the back's text block
+const stars = () => { let r = 7; const rnd = () => (r = (r * 16807) % 2147483647) / 2147483647; const out = [];
+  while (out.length < 34) { const x = 4 + rnd() * 192, y = 50 + rnd() * 150, big = rnd() > .8;
+    if (x > 14 && x < 186 && y > 64 && y < 148) continue;
+    out.push(`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${big ? 1.2 : .65}" fill="#fff" opacity="${big ? .9 : .6}"/>`); }
+  return out.join(''); };
+const barcode = (x, y, n = 24, c = '#1b2046') => `<g fill="${c}">${Array.from({ length: n }, (_, i) => `<rect x="${x + i * 3.4}" y="${y}" width="${[1, 2, 1, 1.5][i % 4]}" height="16"/>`).join('')}</g>`;
+const strip = (w, offset = 0) => `<rect x="0" y="${STRIP_Y}" width="${w}" height="${STRIP_H}" fill="#5fbf7a"/>
+  <line x1="0" y1="${STRIP_Y + 1.5}" x2="${w}" y2="${STRIP_Y + 1.5}" stroke="#fff" stroke-opacity=".4" stroke-dasharray="2 3"/><line x1="0" y1="${STRIP_Y + STRIP_H - 1.5}" x2="${w}" y2="${STRIP_Y + STRIP_H - 1.5}" stroke="#fff" stroke-opacity=".4" stroke-dasharray="2 3"/>
+  <text x="${8 - offset}" y="${STRIP_Y + 11.5}" font-family="DM Mono" font-size="6" letter-spacing="1.2" fill="#fff">TEAR HERE › · PULL TO OPEN › · TEAR HERE › · PULL TO OPEN ›</text>`;
+const face = (w, body, label, withStrip = false) => `<svg viewBox="0 0 ${w} ${H}" role="img" aria-label="${label}">${body}${withStrip ? strip(w) : ''}</svg>`;
+
+// ---------- the base design (front and lineup unchanged, now with renders) ----------
+const front = `${sky(FW)}
+  <circle cx="146" cy="182" r="26" fill="#ffe2a0"/><circle cx="146" cy="182" r="40" fill="#ffe2a0" opacity=".35"/>
+  ${cloud(40, 146, .9, .95)}${cloud(170, 128, .7, .9)}
+  <text x="100" y="96" text-anchor="middle" font-family="Fraunces" font-weight="750" font-size="40" fill="#2c5f8a">Sprout</text>
+  <text x="100" y="111" text-anchor="middle" font-family="DM Mono" font-size="6.5" letter-spacing="1.8" fill="#2c5f8a">LITTLE MOMENTS · SERIES 01</text>
+  ${hills(FW, 190, 214)}
+  <g transform="translate(118 166)"><rect x="5" y="16" width="4" height="22" fill="#9a6a3c"/><rect x="-6" y="0" width="26" height="20" rx="3" fill="#c48b54"/><text x="7" y="15" text-anchor="middle" font-family="Fraunces" font-weight="750" font-size="15" fill="#fff4e2">?</text></g>
+  <text x="100" y="244" text-anchor="middle" font-family="Figtree" font-weight="600" font-size="10" fill="#fff">Who's growing inside?</text>`;
+const lineup = `${sky(SW)}
+  <text x="65" y="68" text-anchor="middle" font-family="Fraunces" font-weight="750" font-size="15" fill="#2c5f8a">Collect all six</text>
+  ${[116, 174, 232].map((y, r) => `<path d="M0 ${y} C40 ${y - 8} 90 ${y + 8} 130 ${y - 4} V${H} H0Z" fill="${['#b6e4bf', '#8fd19e', '#5fbf7a'][r]}"/>`).join('')}
+  ${SPROUTS.map((s, i) => { const x = i % 2 ? 94 : 36, y = [120, 178, 236][Math.floor(i / 2)];
+    return `${img(s.id, x, y, 36)}<text x="${x}" y="${y + 10}" text-anchor="middle" font-family="DM Mono" font-size="5.3" letter-spacing=".5" fill="#244d33">${s.n} ${s.name.toUpperCase()}</text>`; }).join('')}`;
+const momentsSide = `${sky(SW)}${cloud(40, 86, .8)}${cloud(96, 150, .6, .85)}${cloud(30, 196, .5, .8)}
+  <g font-family="Fraunces" font-style="italic" font-size="15" fill="#4f7fa3" text-anchor="middle">${['Wonder.', 'Read.', 'Rest.', 'Roam.', 'Cheer.', 'Glow.'].map((w, i) => `<text x="65" y="${78 + i * 22}">${w}</text>`).join('')}</g>${hills(SW, 236, 246)}`;
+const noteBack = `${sky(FW)}${cloud(150, 72, .9)}${hills(FW, 200, 222)}
+  <rect x="18" y="62" width="164" height="112" rx="10" fill="#fff" opacity=".85"/>
+  <text x="30" y="84" font-family="Fraunces" font-weight="700" font-size="14" fill="#2f4a66">Inside this box</text>
+  <g font-family="Figtree" font-size="8.5" fill="#3d5873"><text x="30" y="102">One Sprout figure, chosen at random</text><text x="30" y="114">from the six in this series.</text><text x="30" y="134">Its side leaves are its arms.</text><text x="30" y="146">The boots stay on.</text></g>
+  ${barcode(30, 228)}`;
+
+// ---------- second side options ----------
+const sides = [
+  { name: 'Up close', why: 'One Sprout, big, sitting on the hill with a small name tag. Boxes would carry different ones, so a row on a shelf shows the whole cast. It’s decorative, not a clue to who’s inside.', body: `${sky(SW)}${cloud(30, 78, .6, .95)}${cloud(108, 108, .45, .9)}
+    ${hills(SW, 196, 222)}
+    ${img('daydream', 66, 236, 150)}` },
+  { name: 'Up close, with its moment', why: 'The big Sprout plus its own moment word and line. It gives each box a mood (Wonder, Joy, Rest). The side Sprout is decorative, so it doesn’t give away who’s inside.', body: `${sky(SW)}${cloud(104, 140, .5, .85)}
+    <text x="65" y="80" text-anchor="middle" font-family="Fraunces" font-style="italic" font-weight="600" font-size="26" fill="#2c5f8a">Wonder.</text>
+    <text x="65" y="96" text-anchor="middle" font-family="Figtree" font-size="7" fill="#4f7fa3"><tspan x="65">The best thoughts show up</tspan><tspan x="65" dy="9">when you stop looking for them.</tspan></text>
+    ${hills(SW, 210, 230)}
+    ${img('daydream', 65, 240, 118)}
+    <text x="65" y="254" text-anchor="middle" font-family="DM Mono" font-size="5.2" letter-spacing="1" fill="#fff">DAYDREAM · NO. 01</text>` },
+  { name: 'Moments, with faces', why: 'Today’s list, restyled: each moment word sits beside the Sprout who lives it, on stepped hills that climb up the side.', body: `${sky(SW)}
+    ${[['daydream', 'Wonder.'], ['read', 'Read.'], ['rest', 'Rest.'], ['explore', 'Roam.'], ['cheer', 'Cheer.'], ['light', 'Glow.']].map(([id, w], i) => { const y = 92 + i * 30, c = ['#e3f3e6', '#cdebd4', '#b6e4bf', '#9edaa9', '#86cf95', '#6cc583'][i];
+      return `<path d="M0 ${y + 2} C40 ${y - 6} 90 ${y + 8} 130 ${y - 2} V${H} H0Z" fill="${c}"/>${img(id, i % 2 ? 100 : 28, y + 6, 28)}<text x="${i % 2 ? 82 : 46}" y="${y - 4}" text-anchor="${i % 2 ? 'end' : 'start'}" font-family="Fraunces" font-style="italic" font-weight="600" font-size="13" fill="#2c5f8a">${w}</text>`; }).join('')}
+    <text x="65" y="70" text-anchor="middle" font-family="DM Mono" font-size="5.6" letter-spacing="1.4" fill="#4f7fa3">SIX LITTLE MOMENTS</text>` },
+  { name: 'Moments in the clouds', why: 'Something new: each moment drifts in its own cloud, and one Sprout sits on the hill below, as if it dreamed them up.', body: `${sky(SW)}
+    ${[['Wonder.', 34, 72], ['Read.', 92, 96], ['Rest.', 36, 122], ['Roam.', 92, 146], ['Cheer.', 38, 172], ['Glow.', 92, 196]].map(([w, x, y]) => `${cloud(x, y, 1.05, .95)}<text x="${x + 1}" y="${y + 1}" text-anchor="middle" font-family="Fraunces" font-style="italic" font-weight="600" font-size="9.5" fill="#2c5f8a">${w}</text>`).join('')}
+    ${hills(SW, 224, 240)}
+    ${img('daydream', 62, 252, 50)}` },
+];
+
+// ---------- back options ----------
+const backs = [
+  { name: 'Storybook', why: 'A short story sets up the world and the mystery, with all six Sprouts on the horizon above it.', body: `${sky(FW)}${cloud(40, 70, .7, .9)}${cloud(164, 62, .6, .9)}
+    <path d="M0 116 C60 96 140 124 200 104 V${H} H0Z" fill="#9edaa9"/><path d="M0 132 C70 118 130 140 200 124 V${H} H0Z" fill="#5fbf7a"/>
+    ${SPROUTS.map((s, i) => img(s.id, 22 + i * 31, 124 + (i % 2) * 4, 34)).join('')}
+    <rect x="0" y="140" width="${FW}" height="${H - 140}" fill="#fbf4e8"/>
+    <text x="18" y="160" font-family="Fraunces" font-weight="700" font-size="12" fill="#2c5f8a">Past the last garden gate</text>
+    <g font-family="Figtree" font-size="7.6" fill="#4a5a6b"><text x="18" y="176">where the morning light lands first, six little</text><text x="18" y="187">Sprouts are growing. Each keeps a small habit:</text><text x="18" y="198">a daydream, a good book, a nap in the moss.</text><text x="18" y="214">One of them is in this box. Which one?</text><text x="18" y="225">Pull the strip and see.</text></g>
+    ${barcode(18, 236, 20)}<text x="182" y="250" text-anchor="end" font-family="DM Mono" font-size="5.5" letter-spacing="1" fill="#7a8796">SPR-S01</text>` },
+  { name: 'Collector checklist', why: 'Every Sprout pictured with a circle to tick. The back becomes a record of what you’ve found, which is the heart of collecting.', body: `${sky(FW)}${cloud(170, 70, .6, .9)}
+    <text x="100" y="72" text-anchor="middle" font-family="Fraunces" font-weight="750" font-size="15" fill="#2c5f8a">Who have you found?</text>
+    ${SPROUTS.map((s, i) => { const x = 38 + (i % 3) * 62, y = 92 + Math.floor(i / 3) * 70;
+      return `<rect x="${x - 27}" y="${y}" width="54" height="62" rx="9" fill="#fff" opacity=".8"/>${img(s.id, x, y + 44, 40)}<circle cx="${x + 19}" cy="${y + 8}" r="5" fill="#fff" stroke="#5fbf7a" stroke-width="1.4"/><text x="${x}" y="${y + 55}" text-anchor="middle" font-family="DM Mono" font-size="5" letter-spacing=".4" fill="#2c5f8a">${s.n} ${s.name.toUpperCase()}</text>`; }).join('')}
+    ${hills(FW, 240, 250)}${barcode(18, 236, 20, '#fff')}` },
+  { name: 'Garden map', why: 'A little map of where each Sprout lives. It deepens the world and gives every character a place, which the app’s dioramas could echo.', body: `<rect width="${FW}" height="${H}" fill="#bfe3b9"/>
+    <path d="M14 248 C40 210 150 228 160 190 S60 150 70 118 S170 96 186 64" fill="none" stroke="#f4e3c3" stroke-width="9" stroke-linecap="round"/>
+    <path d="M14 248 C40 210 150 228 160 190 S60 150 70 118 S170 96 186 64" fill="none" stroke="#e2c99a" stroke-width="1" stroke-dasharray="3 4"/>
+    <circle cx="150" cy="124" r="14" fill="#8ccf8f"/><circle cx="44" cy="214" r="10" fill="#8ccf8f"/><ellipse cx="40" cy="160" rx="22" ry="10" fill="#7fb7d8" opacity=".7"/>
+    <text x="100" y="48" text-anchor="middle" font-family="Fraunces" font-weight="750" font-size="15" fill="#24553a">Map of the garden</text>
+    ${[['daydream', 46, 104, 'the sunny window'], ['read', 150, 152, 'the reading stump'], ['rest', 104, 196, 'the moss bed'], ['explore', 176, 92, 'the far trail'], ['cheer', 62, 230, 'the petal parade'], ['light', 156, 232, 'the lantern']].map(([id, x, y, place]) => {
+      const s = SPROUTS.find((t) => t.id === id);
+      return `<ellipse cx="${x}" cy="${y}" rx="14" ry="4" fill="#24553a" opacity=".15"/>${img(id, x, y, 30)}<text x="${x}" y="${y + 9}" text-anchor="middle" font-family="DM Mono" font-size="4.8" letter-spacing=".3" fill="#24553a">${s.name.toUpperCase()}</text><text x="${x}" y="${y + 15}" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="5.5" fill="#24553a">${place}</text>`; }).join('')}` },
+  { name: 'Dusk side', why: 'The back is the same garden at night, with Little Light glowing on the hill. Turn the box round and the sky goes from dawn to dusk.', body: `${sky(FW, '#1d2350', '#3d3f78', '#6a5b8f')}
+    ${stars()}
+    <circle cx="160" cy="72" r="12" fill="#f4f0d8"/><circle cx="165" cy="68" r="11" fill="#1f2553"/>
+    <text x="20" y="80" font-family="Fraunces" font-weight="700" font-size="14" fill="#eef0ff">Inside this box</text>
+    <g font-family="Figtree" font-size="8.2" fill="#c9cff5"><text x="20" y="98">One Sprout figure, chosen at random</text><text x="20" y="110">from the six in this series.</text><text x="20" y="128">Its side leaves are its arms.</text><text x="20" y="140">The boots stay on.</text></g>
+    ${hills(FW, 206, 228, '#2c4a5c', '#1f3a48')}
+    <ellipse cx="146" cy="196" rx="38" ry="38" fill="url(#glow)"/>${img('light', 146, 214, 52)}
+    ${barcode(20, 234, 20, '#c9cff5')}<text x="182" y="248" text-anchor="end" font-family="DM Mono" font-size="5.5" letter-spacing="1" fill="#c9cff5">SPR-S01</text>` },
+];
+
+// ---------- front options ----------
+const mark = (y, c = '#2c5f8a') => `<text x="100" y="${y}" text-anchor="middle" font-family="Fraunces" font-weight="750" font-size="40" fill="${c}">Sprout</text>
+  <text x="100" y="${y + 15}" text-anchor="middle" font-family="DM Mono" font-size="6.5" letter-spacing="1.8" fill="${c}">LITTLE MOMENTS · SERIES 01</text>`;
+const fronts = [
+  { name: 'Peeking over the hill', why: 'A Sprout’s head and eyes rise over the hill, the rest hidden. Friendly and curious, and the eyes say "someone’s here" without saying who.', body: `${sky(FW)}
+    <circle cx="156" cy="150" r="22" fill="#ffe2a0"/><circle cx="156" cy="150" r="34" fill="#ffe2a0" opacity=".35"/>
+    ${cloud(38, 128, .8, .95)}${mark(80)}
+    ${img('daydream', 100, 268, 170)}
+    ${hills(FW, 212, 230)}
+    <text x="100" y="246" text-anchor="middle" font-family="Figtree" font-weight="600" font-size="10" fill="#fff">Who's growing inside?</text>` },
+  { name: 'Mystery silhouette', why: 'A big glowing white Sprout shape stands on the hill with a "?". The classic "who’s that?" reveal, using the real model’s outline.', body: `${sky(FW)}
+    ${cloud(34, 150, .8, .9)}${cloud(172, 132, .6, .85)}${mark(82)}
+    ${hills(FW, 200, 220)}
+    <g filter="url(#whiteout)" opacity=".95">${img('daydream', 100, 222, 118)}</g>
+    <text x="100" y="172" text-anchor="middle" font-family="Fraunces" font-weight="750" font-size="30" fill="#a9c9e6">?</text>
+    <text x="100" y="246" text-anchor="middle" font-family="Figtree" font-weight="600" font-size="10" fill="#fff">Who's growing inside?</text>` },
+  { name: 'Behind the clouds', why: 'All six Sprouts peek out from a bank of clouds. It shows the whole series up front, so it sells the collection, while you still can’t tell which one you’ve got.', body: `${sky(FW)}${mark(90)}
+    ${SPROUTS.map((s, i) => img(s.id, 22 + i * 31.2, 178 + (i % 2 ? -6 : 0), 44)).join('')}
+    ${[[0, 182, 1.2], [36, 174, 1.15], [74, 184, 1.25], [112, 172, 1.2], [150, 184, 1.2], [190, 176, 1.25], [20, 192, 1.1], [100, 194, 1.2], [176, 192, 1.1]].map(([x, y, k]) => cloud(x, y, k)).join('')}
+    ${hills(FW, 214, 232)}
+    <text x="100" y="250" text-anchor="middle" font-family="Figtree" font-weight="600" font-size="10" fill="#fff">One of these is inside</text>` },
+  { name: 'Underground', why: 'A cutaway of the hill shows a seed marked "?" in the soil, with a shoot climbing to the surface. It takes "who’s growing inside?" literally.', body: `${sky(FW)}
+    <circle cx="150" cy="150" r="20" fill="#ffe2a0"/><circle cx="150" cy="150" r="32" fill="#ffe2a0" opacity=".35"/>
+    ${cloud(40, 136, .8, .95)}${mark(92)}
+    <path d="M0 176 C60 160 140 184 200 166 V${H} H0Z" fill="#5fbf7a"/>
+    <path d="M0 188 C60 174 140 196 200 180 V${H} H0Z" fill="url(#pebbles)"/>
+    <path d="M100 222 C96 206 104 196 100 178" fill="none" stroke="#5fbf7a" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M100 178 C92 168 84 168 80 172 C86 178 94 180 100 178Z" fill="#7fd395"/><path d="M100 178 C108 168 116 168 120 172 C114 178 106 180 100 178Z" fill="#7fd395"/>
+    <use href="#drop" x="86" y="214" width="28" height="35" color="#f4e3c3"/>
+    <text x="100" y="242" text-anchor="middle" font-family="Fraunces" font-weight="750" font-size="15" fill="#9a6a3c">?</text>
+    <text x="100" y="208" text-anchor="middle" font-family="Figtree" font-weight="600" font-size="8" fill="#fff4e2" transform="translate(-52 0)">Who's growing</text>
+    <text x="100" y="218" text-anchor="middle" font-family="Figtree" font-weight="600" font-size="8" fill="#fff4e2" transform="translate(-52 0)">inside?</text>` },
+];
+
+// ---------- map layouts for the back ----------
+const PLACES = { daydream: 'the sunny window', read: 'the reading stump', rest: 'the moss bed', explore: 'the far trail', cheer: 'the petal parade', light: 'the lantern' };
+const byId = (id) => SPROUTS.find((t) => t.id === id);
+const trail = (d) => `<path d="${d}" fill="none" stroke="#f4e3c3" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="#e2c99a" stroke-width="1" stroke-dasharray="3 4"/>`;
+// a stop: shadow, the render standing at (x, y), and its label below, left or right
+const stop = (id, x, y, side = 'below', dy = 0, h = 28) => {
+  const s = byId(id), name = `${s.n} ${s.name.toUpperCase()}`;
+  const lab = side === 'below'
+    ? `<text x="${x}" y="${y + 9 + dy}" text-anchor="middle" font-family="DM Mono" font-size="4.8" letter-spacing=".3" fill="#24553a">${name}</text><text x="${x}" y="${y + 15.5 + dy}" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="5.6" fill="#24553a">${PLACES[id]}</text>`
+    : `<text x="${side === 'left' ? x - 16 : x + 16}" y="${y - 13}" text-anchor="${side === 'left' ? 'end' : 'start'}" font-family="DM Mono" font-size="4.8" letter-spacing=".3" fill="#24553a">${name}</text><text x="${side === 'left' ? x - 16 : x + 16}" y="${y - 6}" text-anchor="${side === 'left' ? 'end' : 'start'}" font-family="Fraunces" font-style="italic" font-size="5.6" fill="#24553a">${PLACES[id]}</text>`;
+  return `<ellipse cx="${x}" cy="${y}" rx="12" ry="3.4" fill="#24553a" opacity=".16"/>${img(id, x, y, h)}${lab}`;
+};
+const mapTitle = (t = 'Map of the garden', sub = 'WHERE THE SPROUTS LIVE') => `<text x="100" y="34" text-anchor="middle" font-family="Fraunces" font-weight="750" font-size="15" fill="#24553a">${t}</text><text x="100" y="45" text-anchor="middle" font-family="DM Mono" font-size="5" letter-spacing="1.4" fill="#3f7a55">${sub}</text>`;
+const mapFoot = `<rect x="0" y="240" width="${FW}" height="20" fill="#24553a"/>${barcode(14, 242, 18, '#e9f4e3')}<text x="186" y="252.5" text-anchor="end" font-family="DM Mono" font-size="5" letter-spacing=".8" fill="#e9f4e3">SPR-S01</text>`;
+const grass = `<rect width="${FW}" height="${H}" fill="#c4e6bd"/>`;
+const tree = (x, y, r = 9) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#93cf92"/><circle cx="${x - r * .3}" cy="${y - r * .3}" r="${r * .45}" fill="#a9dba6"/>`;
+
+const maps = [
+  { name: 'Winding path', why: 'A switchback path climbs the garden in three rows of two. Sprouts sit on two straight columns, numbered 01 to 06 in the order you’d walk past them.', body: `${grass}${mapTitle()}
+    ${trail('M14 207 H186 C198 207 198 151 186 151 H14 C2 151 2 95 14 95 H186')}
+    ${tree(100, 82, 7)}${tree(100, 138, 6)}${tree(100, 194, 6)}
+    ${stop('daydream', 52, 206, 'below', 6)}${stop('read', 148, 206, 'below', 6)}${stop('rest', 148, 150, 'below', 6)}${stop('explore', 52, 150, 'below', 6)}${stop('cheer', 52, 94, 'below', 6)}${stop('light', 148, 94, 'below', 6)}
+    ${mapFoot}` },
+  { name: 'Garden ring', why: 'A loop path round a little pond, with the six spaced evenly around it, like the garden island in the app. Calm and symmetrical.', body: `${grass}${mapTitle()}
+    <ellipse cx="100" cy="142" rx="70" ry="56" fill="none" stroke="#f4e3c3" stroke-width="9"/><ellipse cx="100" cy="142" rx="70" ry="56" fill="none" stroke="#e2c99a" stroke-width="1" stroke-dasharray="3 4"/>
+    <ellipse cx="100" cy="160" rx="18" ry="9" fill="#86bfdc"/><ellipse cx="96" cy="158" rx="6" ry="2" fill="#a9d3e8"/>
+    ${[['daydream', -120], ['read', -60], ['rest', 0], ['explore', 60], ['cheer', 120], ['light', 180]].map(([id, a]) => { const r = (a * Math.PI) / 180;
+      const x = +(100 + 70 * Math.cos(r)).toFixed(1), y = +(142 + 56 * Math.sin(r)).toFixed(1);
+      // top and bottom pairs label below (inside the loop at the top, outside at the bottom); the two at the sides label inwards
+      return stop(id, x, y, a === 0 ? 'left' : a === 180 ? 'right' : 'below', a > 0 && a < 180 ? 3 : 0); }).join('')}
+    ${mapFoot}` },
+  { name: 'Map with legend', why: 'Numbered markers on a small map, and a tidy two-column legend underneath. The most readable: every name lines up.', body: `${grass}${mapTitle()}
+    ${trail('M18 158 C50 156 52 118 84 116 S130 146 156 128 S160 84 186 70')}
+    ${tree(36, 92, 9)}${tree(120, 82, 7)}<ellipse cx="128" cy="164" rx="22" ry="8" fill="#86bfdc"/>
+    ${[['daydream', 26, 154], ['read', 66, 120], ['rest', 104, 128], ['explore', 146, 134], ['cheer', 164, 100], ['light', 182, 72]].map(([id, x, y]) => {
+      const s = byId(id); return `<ellipse cx="${x}" cy="${y}" rx="9" ry="2.6" fill="#24553a" opacity=".16"/>${img(id, x, y, 22)}<circle cx="${x + 9}" cy="${y - 20}" r="4.6" fill="#24553a"/><text x="${x + 9}" y="${y - 18.2}" text-anchor="middle" font-family="DM Mono" font-size="4.6" fill="#e9f4e3">${+s.n}</text>`; }).join('')}
+    <rect x="12" y="176" width="176" height="56" rx="6" fill="#e9f4e3"/>
+    ${SPROUTS.map((s, i) => { const x = i < 3 ? 22 : 106, y = 190 + (i % 3) * 15;
+      return `<circle cx="${x}" cy="${y - 1.8}" r="4.6" fill="#24553a"/><text x="${x}" y="${y}" text-anchor="middle" font-family="DM Mono" font-size="4.6" fill="#e9f4e3">${+s.n}</text><text x="${x + 8}" y="${y - 1.5}" font-family="Fraunces" font-weight="700" font-size="6" fill="#24553a">${s.name}</text><text x="${x + 8}" y="${y + 4.5}" font-family="Fraunces" font-style="italic" font-size="5" fill="#3f7a55">${PLACES[s.id]}</text>`; }).join('')}
+    ${mapFoot}` },
+  { name: 'Trail', why: 'One path straight up the middle, from the garden gate to the sunrise, with stops alternating left and right. Reads like a little hiking-trail sign.', body: `${grass}${mapTitle('The garden trail', 'FROM THE GATE TO THE SUNRISE')}
+    <circle cx="100" cy="62" r="9" fill="#ffe2a0"/>
+    ${trail('M100 238 V72')}
+    <g transform="translate(100 232)"><rect x="-13" y="-8" width="2.4" height="12" fill="#9a6a3c"/><rect x="10.6" y="-8" width="2.4" height="12" fill="#9a6a3c"/><rect x="-13" y="-8" width="26" height="2.4" fill="#9a6a3c"/></g>
+    ${[['daydream', 226], ['read', 198], ['rest', 170], ['explore', 142], ['cheer', 114], ['light', 86]].map(([id, y], i) => i % 2 ? stop(id, 124, y, 'right') : stop(id, 76, y, 'left')).join('')}
+    ${mapFoot}` },
+];
+
+// ---------- the back: the Sprouts at home in the garden, no labels ----------
+const sprout = (id, x, y, h = 32) => `<ellipse cx="${x}" cy="${y}" rx="${h * .38}" ry="${h * .1}" fill="#24553a" opacity=".16"/>${img(id, x, y, h)}`;
+const flowers = (pts, c) => pts.map(([x, y]) => `<g transform="translate(${x} ${y})" fill="${c}"><circle r="1.4" cx="-1.4"/><circle r="1.4" cx="1.4"/><circle r="1.4" cy="-1.4"/><circle r="1.4" cy="1.4"/><circle r="1" fill="#ffe2a0"/></g>`).join('');
+const homeBack = `${grass}
+  <text x="100" y="34" text-anchor="middle" font-family="Fraunces" font-weight="750" font-size="15" fill="#24553a">Where the Sprouts live</text>
+  ${trail('M100 242 C100 214 112 204 100 184 S70 146 98 124 S160 112 170 80')}
+  ${tree(116, 66, 10)}${tree(22, 122, 9)}${tree(184, 154, 9)}${tree(186, 208, 6)}
+  <ellipse cx="136" cy="190" rx="16" ry="7" fill="#86bfdc"/><ellipse cx="132" cy="188" rx="5" ry="1.6" fill="#a9d3e8"/>
+  ${flowers([[30, 66], [72, 58], [150, 98], [16, 180], [80, 206], [176, 120]], '#f6b8c8')}${flowers([[60, 118], [120, 154], [26, 232], [118, 228]], '#fff4e2')}
+  <!-- Daydream: a bench in a patch of sun -->
+  <circle cx="48" cy="86" r="18" fill="#fff3c4" opacity=".7"/><rect x="34" y="94" width="28" height="3" rx="1.5" fill="#b07a48"/><rect x="36" y="96" width="2" height="5" fill="#9a6a3c"/><rect x="58" y="96" width="2" height="5" fill="#9a6a3c"/>
+  ${sprout('daydream', 48, 96)}
+  <!-- Explore: where the path runs off the top of the garden -->
+  ${sprout('explore', 166, 92)}
+  <!-- Read: on a tree stump -->
+  <ellipse cx="142" cy="138" rx="11" ry="4" fill="#9a6a3c"/><rect x="131" y="132" width="22" height="6" fill="#b07a48"/><ellipse cx="142" cy="132" rx="11" ry="4" fill="#d9b07c"/>
+  ${sprout('read', 142, 134)}
+  <!-- Rest: curled up on a moss bed -->
+  <ellipse cx="56" cy="166" rx="22" ry="8" fill="#7fbf74"/><ellipse cx="54" cy="164" rx="16" ry="5" fill="#93cf86"/>
+  ${sprout('rest', 56, 168)}
+  <!-- Cheer: a little shower of petals -->
+  ${flowers([[30, 196], [58, 192], [36, 210], [62, 212], [44, 186]], '#f9a8bd')}
+  ${sprout('cheer', 46, 228)}
+  <!-- Little Light: a lantern glow -->
+  <ellipse cx="154" cy="214" rx="26" ry="26" fill="url(#glow)"/><rect x="171" y="198" width="2" height="30" fill="#6b5a44"/><rect x="167" y="194" width="10" height="9" rx="2" fill="#ffe9a8" stroke="#6b5a44" stroke-width="1"/>
+  ${sprout('light', 152, 230)}
+  ${mapFoot}`;
+
+// the 3/4 view: front face flat, the lineup side and the top in oblique depth
+function hero() {
+  const x0 = 96, y0 = 118, dx = 74, dy = -36;
+  return `<svg viewBox="40 40 370 380" role="img" aria-label="Garden at dawn: the box in three-quarter view, front and lineup side">
+    <ellipse cx="${x0 + FW / 2 + 30}" cy="${y0 + H + 6}" rx="170" ry="20" fill="url(#shadow)"/>
+    <g transform="matrix(1 0 ${-dx / SW} ${-dy / SW} ${x0 + dx} ${y0 + dy})"><rect width="${FW}" height="${SW}" fill="#cfe6f7"/><use href="#drop" x="${FW / 2 - 9}" y="${SW / 2 - 11}" width="18" height="22" color="#fff" opacity=".4"/></g>
+    <g transform="matrix(${dx / SW} ${dy / SW} 0 1 ${x0 + FW} ${y0})"><svg width="${SW}" height="${H}" viewBox="0 0 ${SW} ${H}">${lineup}${strip(SW, 60)}</svg><rect width="${SW}" height="${H}" fill="#1b2046" opacity=".08"/></g>
+    <g transform="translate(${x0} ${y0})"><svg width="${FW}" height="${H}" viewBox="0 0 ${FW} ${H}">${fronts[0].body}${strip(FW)}</svg></g>
+    <path d="M${x0 - 2} ${y0 + STRIP_Y} h-22 a8.5 8.5 0 0 0 0 ${STRIP_H} h22Z" fill="#5fbf7a"/>
+  </svg>`;
+}
+
+document.getElementById('box').innerHTML = `
+  <header><h2>The full box</h2><p>A Sprout peeking over the hill on the front, the lineup side with stills of the six models, one big Sprout sitting on the hill on the second side, and the Sprouts at home in their garden on the back.</p></header>
+  <div class="top"><div class="hero">${hero()}</div>
+    <div class="base">
+      <figure>${face(FW, fronts[0].body, 'Front', true)}<figcaption class="small">Front</figcaption></figure>
+      <figure>${face(SW, lineup, 'Lineup side')}<figcaption class="small">Lineup side</figcaption></figure>
+      <figure>${face(SW, sides[0].body, 'Second side, one big Sprout', true)}<figcaption class="small">Second side</figcaption></figure>
+      <figure>${face(FW, homeBack, 'Back, the Sprouts in their garden')}<figcaption class="small">Back · the garden</figcaption></figure>
+    </div></div>`;
+</script>

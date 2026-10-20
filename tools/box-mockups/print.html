@@ -1,0 +1,265 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Box print directions</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=DM+Mono:wght@400;500&family=Figtree:wght@400;500;600;700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..800,100;1,9..144,400..600,100&display=swap">
+<style>
+/* Print explorations for today's carton: same shape and tear strip, four different visual designs.
+   Each design is four face drawings (front, lineup side, second side, back) composed into a 3/4 view. */
+:root {
+  --ground: #eeebe3; --paper: #fbf9f4; --ink: #1b2046; --ink-soft: #565c7c; --line: rgba(27, 32, 70, .12);
+  --display: "Fraunces", Georgia, serif; --body: "Figtree", system-ui, sans-serif; --mono: "DM Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 15px/1.55 var(--body); -webkit-font-smoothing: antialiased; }
+main { max-width: 1240px; margin: 0 auto; padding: 48px 24px 96px; }
+.page-head h1 { margin: 0; font: 650 44px/1 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; letter-spacing: -.015em; }
+.page-head p { margin: 12px 0 0; max-width: 70ch; color: var(--ink-soft); text-wrap: pretty; }
+.jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.jump a { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink); text-decoration: none; padding: 9px 12px; border-radius: 999px; background: var(--paper); box-shadow: 0 0 0 1px var(--line); }
+
+.dir { margin-top: 56px; background: var(--paper); border-radius: 28px; box-shadow: 0 0 0 1px var(--line), 0 30px 60px -40px rgba(27,32,70,.35); overflow: hidden; }
+.top { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+.hero { min-height: 480px; display: grid; place-items: center; background: var(--stage); }
+.hero > svg { width: min(500px, 96%); height: auto; overflow: visible; }
+.hero svg svg, .row svg svg { overflow: hidden; }
+.info { padding: 36px 40px 32px; display: grid; align-content: start; gap: 16px; }
+.tag { justify-self: start; font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; padding: 7px 11px; border-radius: 999px; background: var(--tag-bg); color: var(--tag-fg); }
+.info h2 { margin: 0; font: 650 36px/1.02 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; letter-spacing: -.015em; }
+.pitch { margin: 0; font-size: 17px; color: var(--ink-soft); text-wrap: pretty; }
+dl { margin: 2px 0 0; display: grid; grid-template-columns: 96px 1fr; gap: 10px 18px; }
+dt { font: 500 11px/1.9 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
+dd { margin: 0; text-wrap: pretty; }
+.swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+.sw { display: inline-flex; align-items: center; gap: 8px; font: 500 11px/1 var(--mono); color: var(--ink-soft); padding: 5px 10px 5px 5px; border-radius: 999px; box-shadow: 0 0 0 1px var(--line); }
+.sw i { width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
+.faces { border-top: 1px solid var(--line); padding: 24px 32px 30px; }
+.faces h3 { margin: 0 0 14px; font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
+.row { display: grid; grid-template-columns: 200fr 130fr 130fr 200fr; gap: 16px; align-items: end; }
+.row figure { margin: 0; }
+.row svg { width: 100%; height: auto; display: block; border-radius: 6px; box-shadow: 0 0 0 1px var(--line); }
+figcaption { margin-top: 8px; font: 500 10.5px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); }
+@media (max-width: 900px) { .top { grid-template-columns: 1fr; } .row { grid-template-columns: 1fr 1fr; } .hero { min-height: 400px; } .info { padding: 28px 24px; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="drop" viewBox="0 0 34 42"><path fill="currentColor" d="M17 1C24 9 31 17 31 25.5A14 14 0 0 1 3 25.5C3 17 10 9 17 1Z"/></symbol>
+    <symbol id="sprout" viewBox="0 0 60 84">
+      <path fill="currentColor" d="M30 2C41 15 52 27 52 41A22 22 0 0 1 8 41C8 27 19 15 30 2Z"/>
+      <path d="M30 14V38M30 26L23 20M30 30L37 24" fill="none" stroke="rgba(0,0,0,.16)" stroke-width="1.6" stroke-linecap="round"/>
+      <circle cx="22.5" cy="46" r="2.6" fill="#1b2046"/><circle cx="37.5" cy="46" r="2.6" fill="#1b2046"/>
+      <path d="M25.5 52Q30 55.5 34.5 52" fill="none" stroke="#1b2046" stroke-width="1.8" stroke-linecap="round"/>
+      <rect fill="currentColor" x="27" y="60" width="6" height="13" rx="3"/>
+      <path fill="currentColor" d="M28 66C20 57 9 59 3 63C9 70 21 72 28 66Z"/><path fill="currentColor" d="M32 66C40 57 51 59 57 63C51 70 39 72 32 66Z"/>
+      <rect x="19.5" y="72" width="10" height="9" rx="3.5" fill="#a8692f"/><rect x="30.5" y="72" width="10" height="9" rx="3.5" fill="#a8692f"/>
+    </symbol>
+    <symbol id="sil" viewBox="0 0 60 84"><g fill="currentColor">
+      <path d="M30 2C41 15 52 27 52 41A22 22 0 0 1 8 41C8 27 19 15 30 2Z"/><rect x="27" y="58" width="6" height="15" rx="3"/>
+      <path d="M28 66C20 57 9 59 3 63C9 70 21 72 28 66Z"/><path d="M32 66C40 57 51 59 57 63C51 70 39 72 32 66Z"/>
+      <rect x="19.5" y="72" width="10" height="9" rx="3.5"/><rect x="30.5" y="72" width="10" height="9" rx="3.5"/></g>
+    </symbol>
+    <!-- a Sprout's head peeking: drop, eyes, the tips of two leaf hands -->
+    <symbol id="peek" viewBox="0 0 60 50">
+      <path fill="currentColor" d="M30 2C41 15 52 27 52 41A22 22 0 0 1 8 41C8 27 19 15 30 2Z"/>
+      <path d="M30 14V36M30 25L23 19M30 29L37 23" fill="none" stroke="rgba(0,0,0,.16)" stroke-width="1.6" stroke-linecap="round"/>
+      <ellipse cx="22.5" cy="40" rx="2.8" ry="3.4" fill="#1b2046"/><ellipse cx="37.5" cy="40" rx="2.8" ry="3.4" fill="#1b2046"/>
+      <circle cx="23.4" cy="38.8" r=".9" fill="#fff"/><circle cx="38.4" cy="38.8" r=".9" fill="#fff"/>
+    </symbol>
+    <symbol id="hand" viewBox="0 0 26 14"><path fill="currentColor" d="M2 12C4 4 14 0 24 3C20 9 10 13 2 12Z"/></symbol>
+    <radialGradient id="shadow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#1b2046" stop-opacity=".24"/><stop offset="1" stop-color="#1b2046" stop-opacity="0"/></radialGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="softer"><feGaussianBlur stdDeviation="9"/></filter>
+  </defs>
+</svg>
+
+<main>
+  <header class="page-head">
+    <h1>Box print: four visual designs</h1>
+    <p>Same carton and the same green-style tear strip across the top. Only the artwork changes. Each design is shown as the box on the stage, then its four faces laid flat: front, the lineup side, the second side and the back. Wordmark, the mystery mark and colour are all open in these.</p>
+    <nav class="jump" id="jump"></nav>
+  </header>
+  <div id="dirs"></div>
+</main>
+
+<script>
+// Face sizes, in the carton's proportions (front 200 x 260, sides 130 deep)
+const FW = 200, SW = 130, H = 260;
+const SERIES = [
+  ['01', 'Daydream', '#cdd8f3'], ['02', 'Read', '#f1dcc0'], ['03', 'Rest', '#d9d4ee'],
+  ['04', 'Explore', '#e3ebc9'], ['05', 'Cheer', '#f6d8cf'], ['06', 'Little Light', '#3a4070'],
+];
+const STRIP_Y = 30, STRIP_H = 17;
+const strip = (w, bg, fg, offset = 0) => `
+  <rect x="0" y="${STRIP_Y}" width="${w}" height="${STRIP_H}" fill="${bg}"/>
+  <line x1="0" y1="${STRIP_Y + 1.5}" x2="${w}" y2="${STRIP_Y + 1.5}" stroke="${fg}" stroke-opacity=".35" stroke-dasharray="2 3"/>
+  <line x1="0" y1="${STRIP_Y + STRIP_H - 1.5}" x2="${w}" y2="${STRIP_Y + STRIP_H - 1.5}" stroke="${fg}" stroke-opacity=".35" stroke-dasharray="2 3"/>
+  <text x="${8 - offset}" y="${STRIP_Y + 11.5}" font-family="DM Mono" font-size="6" letter-spacing="1.2" fill="${fg}">TEAR HERE › · PULL TO OPEN › · TEAR HERE › · PULL TO OPEN ›</text>`;
+const face = (w, body, extra = '') => `<svg viewBox="0 0 ${w} ${H}" width="${w}" height="${H}">${body}${extra}</svg>`;
+
+// ---------- 1 · Illustrated scene ----------
+const sky1 = (id, w) => `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9d6f5"/><stop offset=".62" stop-color="#fde6d3"/><stop offset="1" stop-color="#fff1df"/></linearGradient></defs><rect width="${w}" height="${H}" fill="url(#${id})"/>`;
+const cloud = (x, y, s = 1, o = 1) => `<g transform="translate(${x} ${y}) scale(${s})" fill="#fff" opacity="${o}"><ellipse cx="0" cy="0" rx="22" ry="11"/><ellipse cx="14" cy="-7" rx="14" ry="11"/><ellipse cx="-12" cy="-4" rx="11" ry="9"/></g>`;
+const hills = (w, y1, y2) => `<path d="M0 ${y1} C${w * .3} ${y1 - 26} ${w * .6} ${y1 + 8} ${w} ${y1 - 14} V${H} H0Z" fill="#9edaa9"/><path d="M0 ${y2} C${w * .35} ${y2 - 18} ${w * .7} ${y2 + 14} ${w} ${y2 - 6} V${H} H0Z" fill="#5fbf7a"/>`;
+const scene = {
+  front: face(FW, `${sky1('s1f', FW)}
+    <circle cx="146" cy="182" r="26" fill="#ffe2a0"/><circle cx="146" cy="182" r="40" fill="#ffe2a0" opacity=".35"/>
+    ${cloud(40, 146, .9, .95)}${cloud(170, 128, .7, .9)}
+    <text x="100" y="96" text-anchor="middle" font-family="Fraunces" font-weight="750" font-size="40" fill="#2c5f8a">Sprout</text>
+    <text x="100" y="111" text-anchor="middle" font-family="DM Mono" font-size="6.5" letter-spacing="1.8" fill="#2c5f8a">LITTLE MOMENTS · SERIES 01</text>
+    ${hills(FW, 190, 214)}
+    <g transform="translate(118 166)"><rect x="5" y="16" width="4" height="22" fill="#9a6a3c"/><rect x="-6" y="0" width="26" height="20" rx="3" fill="#c48b54"/><text x="7" y="15" text-anchor="middle" font-family="Fraunces" font-weight="750" font-size="15" fill="#fff4e2">?</text></g>
+    <text x="100" y="244" text-anchor="middle" font-family="Figtree" font-weight="600" font-size="10" fill="#fff">Who's growing inside?</text>`),
+  sideA: face(SW, `${sky1('s1a', SW)}${cloud(104, 96, .5, .9)}
+    <text x="65" y="74" text-anchor="middle" font-family="Fraunces" font-weight="750" font-size="15" fill="#2c5f8a">Collect all six</text>
+    <path d="M0 132 C40 120 90 140 130 126 V${H} H0Z" fill="#b6e4bf"/><path d="M0 178 C45 168 85 188 130 172 V${H} H0Z" fill="#8fd19e"/><path d="M0 222 C40 212 90 232 130 216 V${H} H0Z" fill="#5fbf7a"/>
+    ${SERIES.map(([n, name], i) => { const x = i % 2 ? 90 : 34, y = [118, 162, 206][Math.floor(i / 2)];
+      return `<g color="${i === 5 ? '#c7f0a8' : '#6cc583'}"><use href="#sprout" x="${x - 11}" y="${y - 22}" width="22" height="31"/></g><text x="${x}" y="${y + 16}" text-anchor="middle" font-family="DM Mono" font-size="5.5" letter-spacing=".6" fill="#2f5a3c">${n} ${name.toUpperCase()}</text>`; }).join('')}`),
+  sideB: face(SW, `${sky1('s1b', SW)}${cloud(40, 86, .8)}${cloud(96, 150, .6, .85)}${cloud(30, 196, .5, .8)}
+    <g font-family="Fraunces" font-style="italic" font-size="15" fill="#4f7fa3" text-anchor="middle">${['Wonder.', 'Read.', 'Rest.', 'Roam.', 'Cheer.', 'Glow.'].map((w, i) => `<text x="65" y="${78 + i * 22}">${w}</text>`).join('')}</g>
+    ${hills(SW, 236, 246)}`),
+  back: face(FW, `${sky1('s1k', FW)}${cloud(150, 72, .9)}${hills(FW, 200, 222)}
+    <rect x="18" y="62" width="164" height="112" rx="10" fill="#fff" opacity=".85"/>
+    <text x="30" y="84" font-family="Fraunces" font-weight="700" font-size="14" fill="#2f4a66">Inside this box</text>
+    <g font-family="Figtree" font-size="8.5" fill="#3d5873"><text x="30" y="102">One Sprout figure, chosen at random</text><text x="30" y="114">from the six in this series.</text><text x="30" y="134">Its side leaves are its arms.</text><text x="30" y="146">The boots stay on.</text></g>
+    <g fill="#1b2046">${Array.from({ length: 26 }, (_, i) => `<rect x="${30 + i * 3.4}" y="228" width="${[1, 2, 1, 1.5][i % 4]}" height="18"/>`).join('')}</g>
+    <text x="170" y="244" text-anchor="end" font-family="DM Mono" font-size="6" letter-spacing="1" fill="#fff">SPR-S01</text>`),
+};
+
+// ---------- 2 · Bold graphic pattern ----------
+const pat2 = (id, w) => `<defs><pattern id="${id}" width="28" height="34" patternUnits="userSpaceOnUse"><use href="#drop" x="4" y="4" width="11" height="14" color="#f4ecd6" opacity=".16"/><use href="#drop" x="18" y="21" width="11" height="14" color="#f4ecd6" opacity=".16" transform="rotate(180 23.5 28)"/></pattern></defs><rect width="${w}" height="${H}" fill="#1f6b3d"/><rect width="${w}" height="${H}" fill="url(#${id})"/>`;
+const livery = {
+  front: face(FW, `${pat2('p2f', FW)}
+    <circle cx="100" cy="132" r="70" fill="#f4ecd6"/>
+    <use href="#drop" x="76" y="76" width="48" height="59" color="#c5f06a"/>
+    <text x="100" y="122" text-anchor="middle" font-family="Fraunces" font-weight="800" font-size="28" fill="#1f6b3d">?</text>
+    <text x="100" y="164" text-anchor="middle" font-family="Fraunces" font-weight="750" font-size="27" fill="#1f6b3d">Sprout</text>
+    <text x="100" y="178" text-anchor="middle" font-family="DM Mono" font-size="6" letter-spacing="2" fill="#1f6b3d">SERIES 01</text>
+    <rect x="0" y="222" width="${FW}" height="22" fill="#c5f06a"/>
+    <text x="100" y="236" text-anchor="middle" font-family="DM Mono" font-weight="500" font-size="7" letter-spacing="1.6" fill="#1f6b3d">1 FIGURE INSIDE · 6 TO COLLECT</text>`),
+  sideA: face(SW, `<rect width="${SW}" height="${H}" fill="#f4ecd6"/>
+    <text x="65" y="74" text-anchor="middle" font-family="Fraunces" font-weight="750" font-size="15" fill="#1f6b3d">Collect all six</text>
+    ${SERIES.map(([n, name], i) => { const x = i % 2 ? 92 : 38, y = 92 + Math.floor(i / 2) * 54;
+      return `<use href="#drop" x="${x - 13}" y="${y}" width="26" height="32" color="${i === 5 ? '#c5f06a' : '#1f6b3d'}"/><text x="${x}" y="${y + 24}" text-anchor="middle" font-family="Fraunces" font-weight="700" font-size="10" fill="${i === 5 ? '#1f6b3d' : '#f4ecd6'}">${n}</text><text x="${x}" y="${y + 42}" text-anchor="middle" font-family="DM Mono" font-size="5.5" letter-spacing=".6" fill="#1f6b3d">${name.toUpperCase()}</text>`; }).join('')}`),
+  sideB: face(SW, `${pat2('p2b', SW)}<text transform="translate(80 236) rotate(-90)" font-family="Fraunces" font-weight="800" font-size="54" fill="#f4ecd6">Sprout</text><text transform="translate(98 236) rotate(-90)" font-family="DM Mono" font-size="7" letter-spacing="2" fill="#c5f06a">SIX LITTLE MOMENTS</text>`),
+  back: face(FW, `${pat2('p2k', FW)}<rect x="18" y="62" width="164" height="150" rx="6" fill="#f4ecd6"/>
+    <text x="30" y="86" font-family="Fraunces" font-weight="750" font-size="14" fill="#1f6b3d">Inside this box</text>
+    <g font-family="Figtree" font-size="8.5" fill="#1f6b3d"><text x="30" y="104">One Sprout figure, chosen at random</text><text x="30" y="116">from the six in this series.</text><text x="30" y="136">Its side leaves are its arms.</text><text x="30" y="148">The boots stay on.</text></g>
+    <g fill="#1f6b3d">${Array.from({ length: 26 }, (_, i) => `<rect x="${30 + i * 3.4}" y="176" width="${[1, 2, 1, 1.5][i % 4]}" height="22"/>`).join('')}</g>
+    <text x="170" y="196" text-anchor="end" font-family="DM Mono" font-size="6" letter-spacing="1" fill="#1f6b3d">SPR-S01</text>`),
+};
+
+// ---------- 3 · Per-series colourway (dawn gradient) ----------
+const sky3 = (id, w) => `<defs><linearGradient id="${id}" x1="0" y1="0" x2=".3" y2="1"><stop offset="0" stop-color="#c9d4f2"/><stop offset=".55" stop-color="#ead8ea"/><stop offset="1" stop-color="#f8dccf"/></linearGradient></defs><rect width="${w}" height="${H}" fill="url(#${id})"/>`;
+const dawn = {
+  front: face(FW, `${sky3('g3f', FW)}
+    <circle cx="100" cy="128" r="70" fill="#fff" opacity=".45" filter="url(#softer)"/>
+    <g opacity=".7" filter="url(#soft)"><use href="#sil" x="58" y="64" width="84" height="118" color="#ffffff"/></g>
+    <use href="#sil" x="64" y="70" width="72" height="101" color="#ffffff" opacity=".55"/>
+    <text x="100" y="128" text-anchor="middle" font-family="Fraunces" font-weight="600" font-size="22" fill="#8b7fb0">?</text>
+    <text x="100" y="212" text-anchor="middle" font-family="Fraunces" font-weight="650" font-size="32" fill="#2b2f5a">Sprout</text>
+    <text x="100" y="228" text-anchor="middle" font-family="Figtree" font-weight="500" font-size="8" letter-spacing="2.4" fill="#5a5f86">SIX LITTLE MOMENTS</text>
+    <text x="100" y="246" text-anchor="middle" font-family="DM Mono" font-size="5.6" letter-spacing="1.4" fill="#7a7fa3">SERIES 01 · 1 FIGURE INSIDE</text>`),
+  sideA: face(SW, `<rect width="${SW}" height="${H}" fill="#fbf7f2"/>
+    <text x="16" y="70" font-family="Fraunces" font-weight="650" font-size="13" fill="#2b2f5a">Six skies</text>
+    ${SERIES.map(([n, name, tint], i) => { const y = 82 + i * 28;
+      return `<rect x="16" y="${y}" width="98" height="22" rx="3" fill="${tint}"/><text x="24" y="${y + 14}" font-family="DM Mono" font-size="6" letter-spacing=".8" fill="${i === 5 ? '#e6e9ff' : '#2b2f5a'}">${n}</text><text x="40" y="${y + 14.5}" font-family="Figtree" font-weight="600" font-size="8" fill="${i === 5 ? '#e6e9ff' : '#2b2f5a'}">${name}</text>`; }).join('')}`),
+  sideB: face(SW, `${sky3('g3b', SW)}<circle cx="65" cy="150" r="42" fill="#fff" opacity=".4" filter="url(#softer)"/><text transform="translate(72 244) rotate(-90)" font-family="Fraunces" font-style="italic" font-weight="500" font-size="13" fill="#5a5f86">a little moment, just for you</text>`),
+  back: face(FW, `${sky3('g3k', FW)}<text x="22" y="86" font-family="Fraunces" font-weight="650" font-size="15" fill="#2b2f5a">Inside this box</text>
+    <g font-family="Figtree" font-size="8.5" fill="#4a4f78"><text x="22" y="104">One Sprout figure, chosen at random</text><text x="22" y="116">from the six in this series. Each one</text><text x="22" y="128">brings its own sky.</text></g>
+    <g>${SERIES.map(([, , t], i) => `<circle cx="${30 + i * 16}" cy="152" r="6" fill="${t}" stroke="#fff" stroke-width="1"/>`).join('')}</g>
+    <g fill="#2b2f5a">${Array.from({ length: 26 }, (_, i) => `<rect x="${22 + i * 3.4}" y="214" width="${[1, 2, 1, 1.5][i % 4]}" height="20"/>`).join('')}</g>
+    <text x="178" y="232" text-anchor="end" font-family="DM Mono" font-size="6" letter-spacing="1" fill="#5a5f86">SPR-S01</text>`),
+};
+
+// ---------- 4 · Playful character peek ----------
+const peek = {
+  front: face(FW, `<rect width="${FW}" height="${H}" fill="#ffd95a"/>
+    <text x="100" y="68" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="14" fill="#1b2046">psst… somebody's in here</text>
+    <use href="#peek" x="52" y="78" width="96" height="80" color="#6cc583"/>
+    <rect x="0" y="150" width="${FW}" height="${H - 150}" fill="#fff4d6"/>
+    <use href="#hand" x="34" y="141" width="30" height="16" color="#5bb874"/><use href="#hand" x="136" y="141" width="30" height="16" color="#5bb874" transform="scale(-1 1) translate(-302 0)"/>
+    <text x="100" y="200" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="42" fill="#1b2046">Sprout</text>
+    <text x="100" y="216" text-anchor="middle" font-family="DM Mono" font-size="6.2" letter-spacing="1.6" fill="#1b2046">LITTLE MOMENTS · SERIES 01</text>
+    <text x="100" y="242" text-anchor="middle" font-family="Figtree" font-weight="600" font-size="8.5" fill="#8a6a1c">1 figure inside · 6 to collect</text>`),
+  sideA: face(SW, `<rect width="${SW}" height="${H}" fill="#ffd95a"/>
+    <text x="65" y="72" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="14" fill="#1b2046">Who's hiding?</text>
+    ${SERIES.map(([n, name], i) => { const x = i % 2 ? 70 : 12, y = 84 + Math.floor(i / 2) * 56;
+      return `<rect x="${x}" y="${y}" width="48" height="44" rx="8" fill="#fff4d6"/><svg x="${x}" y="${y}" width="48" height="44" viewBox="0 0 48 44"><use href="#peek" x="8" y="6" width="32" height="27" color="${i === 5 ? '#c7f0a8' : '#6cc583'}"/><rect x="0" y="34" width="48" height="10" fill="#fff4d6"/></svg><text x="${x + 24}" y="${y + 41}" text-anchor="middle" font-family="DM Mono" font-size="5" letter-spacing=".4" fill="#1b2046">${n} ${name.toUpperCase()}</text>`; }).join('')}`),
+  sideB: face(SW, `<rect width="${SW}" height="${H}" fill="#ffd95a"/>
+    <svg x="0" y="0" width="${SW}" height="${H}"><use href="#peek" x="${SW - 40}" y="110" width="80" height="67" color="#6cc583"/></svg>
+    <text x="16" y="96" font-family="Baloo 2" font-weight="800" font-size="13" fill="#1b2046">oh!</text>
+    <text x="16" y="214" font-family="Baloo 2" font-weight="800" font-size="12" fill="#1b2046">Open slowly,</text><text x="16" y="230" font-family="Baloo 2" font-weight="800" font-size="12" fill="#1b2046">they're shy.</text>`),
+  back: face(FW, `<rect width="${FW}" height="${H}" fill="#ffd95a"/>
+    <g color="#6cc583"><use href="#sil" x="70" y="62" width="60" height="84"/></g>
+    <text x="100" y="164" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="12" fill="#1b2046">(that's its back. no peeking.)</text>
+    <rect x="18" y="176" width="164" height="66" rx="8" fill="#fff4d6"/>
+    <g font-family="Figtree" font-size="8.5" fill="#1b2046"><text x="28" y="194">One Sprout figure, chosen at random</text><text x="28" y="206">from the six in this series.</text></g>
+    <g fill="#1b2046">${Array.from({ length: 22 }, (_, i) => `<rect x="${28 + i * 3.4}" y="214" width="${[1, 2, 1, 1.5][i % 4]}" height="20"/>`).join('')}</g>
+    <text x="172" y="232" text-anchor="end" font-family="DM Mono" font-size="6" letter-spacing="1" fill="#1b2046">SPR-S01</text>`),
+};
+
+const DIRS = [
+  { id: 'scene', tag: 'Direction 1 · Illustrated scene', name: 'Garden at dawn', faces: scene, stage: '#e7f0f6', tagBg: '#dceefa', tagFg: '#2f5a7c',
+    strip: ['#5fbf7a', '#fff'], top: '#cfe6f7',
+    pitch: "The box is a little world: sky, sun and clouds above, rolling hills below, wrapping right round the carton. The six Sprouts sit on the hills on the side, and a wooden \"?\" sign stands on the front hill.",
+    notes: [['Wordmark', 'Fraunces in a deep sky blue, set in the open sky above the clouds.'], ['Mystery', 'A little wooden "?" signpost on the hill instead of the leaf-drop.'], ['Lineup side', 'All six Sprouts sitting on terraced hills, named underneath.'], ['Feels like', 'A picture book. Warm and gentle, the most "Sprout world" of the four.']],
+    colors: [['#a9d6f5', 'Sky'], ['#fde6d3', 'Dawn'], ['#5fbf7a', 'Hill'], ['#c48b54', 'Sign']] },
+  { id: 'livery', tag: 'Direction 2 · Bold graphic pattern', name: 'Leaf livery', faces: livery, stage: '#e6ece6', tagBg: '#dfeadf', tagFg: '#1f6b3d',
+    strip: ['#c5f06a', '#1f6b3d'], top: '#1a5c34',
+    pitch: 'A deep green box covered in a repeating leaf-drop pattern, with a cream badge and a lime mystery drop. It reads like a collectible series livery: strong on a shelf, instantly recognisable.',
+    notes: [['Wordmark', 'Fraunces, heavy, in green on a cream badge.'], ['Mystery', 'A lime leaf-drop with a "?" at the centre of the badge.'], ['Lineup side', 'Cream panel; six numbered drops, Little Light picked out in lime.'], ['Feels like', 'A series you collect: graphic, confident, the strongest shelf presence.']],
+    colors: [['#1f6b3d', 'Forest'], ['#f4ecd6', 'Cream'], ['#c5f06a', 'Lime']] },
+  { id: 'dawn', tag: 'Direction 3 · Per-series colourway', name: 'Six skies', faces: dawn, stage: '#eeeaf2', tagBg: '#ebe6f4', tagFg: '#4a4f78',
+    strip: ['#fff', '#5a5f86'], top: '#dcdcf1',
+    pitch: "The box takes on the app's skies: a soft dawn gradient with a glowing white Sprout silhouette and a small \"?\". The lineup side is a colour index, one sky per Sprout, like paint chips.",
+    notes: [['Wordmark', 'Fraunces in deep navy, set quietly at the bottom.'], ['Mystery', 'A glowing, blurred Sprout silhouette with a small "?".'], ['Lineup side', 'Six sky swatches with number and name. Each Sprout brings its own sky.'], ['Feels like', 'Calm and premium; it ties the box to the colour of each reveal in the app.']],
+    colors: [['#c9d4f2', 'Daydream sky'], ['#ead8ea', 'Haze'], ['#f8dccf', 'Cheer sky'], ['#2b2f5a', 'Navy']] },
+  { id: 'peek', tag: 'Direction 4 · Playful character peek', name: 'Somebody’s in here', faces: peek, stage: '#f5efdc', tagBg: '#fdeec0', tagFg: '#7a5a10',
+    strip: ['#6cc583', '#1b2046'], top: '#f7cf47',
+    pitch: 'A sunny yellow box where a Sprout peeks over the cream panel on the front, leaf hands gripping the edge. Another peeks round the corner on the side, and the back shows it from behind.',
+    notes: [['Wordmark', 'A chunky rounded display face in navy, playful and toy-like.'], ['Mystery', 'The peeking eyes: you can see someone, not who.'], ['Lineup side', 'Six little windows, a Sprout peeking up in each.'], ['Feels like', 'Funny and characterful, the most toy-like of the four.']],
+    colors: [['#ffd95a', 'Sun'], ['#fff4d6', 'Cream'], ['#6cc583', 'Leaf'], ['#1b2046', 'Navy']] },
+];
+
+// the 3/4 view: front face flat, the right side and the top in oblique depth
+function hero(d) {
+  const x0 = 96, y0 = 118, dx = 74, dy = -36;
+  const sideM = `matrix(${dx / SW} ${dy / SW} 0 1 ${x0 + FW} ${y0})`;
+  const topM = `matrix(1 0 ${-dx / SW} ${-dy / SW} ${x0 + dx} ${y0 + dy})`;
+  const [sb, sf] = d.strip;
+  return `<svg viewBox="40 40 370 380" role="img" aria-label="${d.name}: the box in three-quarter view">
+    <ellipse cx="${x0 + FW / 2 + 30}" cy="${y0 + H + 6}" rx="170" ry="20" fill="url(#shadow)"/>
+    <g transform="${topM}"><rect width="${FW}" height="${SW}" fill="${d.top}"/><rect width="${FW}" height="${SW}" fill="#fff" opacity=".12"/><use href="#drop" x="${FW / 2 - 9}" y="${SW / 2 - 11}" width="18" height="22" color="#fff" opacity=".35"/></g>
+    <g transform="${sideM}"><svg width="${SW}" height="${H}" viewBox="0 0 ${SW} ${H}">${d.faces.sideB.replace(/^<svg[^>]*>|<\/svg>$/g, '')}${strip(SW, sb, sf, 60)}</svg><rect width="${SW}" height="${H}" fill="#1b2046" opacity=".1"/></g>
+    <g transform="translate(${x0} ${y0})"><svg width="${FW}" height="${H}" viewBox="0 0 ${FW} ${H}">${d.faces.front.replace(/^<svg[^>]*>|<\/svg>$/g, '')}${strip(FW, sb, sf)}</svg></g>
+    <path d="M${x0 - 2} ${y0 + STRIP_Y} h-22 a8.5 8.5 0 0 0 0 ${STRIP_H} h22Z" fill="${sb}"/>
+    <rect x="${x0}" y="${y0}" width="${FW}" height="${H}" fill="none" stroke="#000" stroke-opacity=".06"/>
+  </svg>`;
+}
+// a face laid flat (the strip wraps the front and the second side, so it shows on those two)
+const flat = (d, key, w, label) => {
+  const svg = d.faces[key].replace('<svg ', `<svg role="img" aria-label="${d.name}, ${label}" `).replace(/ width="\d+" height="\d+"/, '');
+  const end = svg.lastIndexOf('</svg>');
+  const withStrip = svg.slice(0, end) + (key === 'front' || key === 'sideB' ? strip(w, d.strip[0], d.strip[1]) : '') + svg.slice(end);
+  return `<figure>${withStrip}<figcaption>${label}</figcaption></figure>`;
+};
+
+document.getElementById('jump').innerHTML = DIRS.map((d, i) => `<a href="#${d.id}">${i + 1} · ${d.name}</a>`).join('');
+document.getElementById('dirs').innerHTML = DIRS.map((d) => `
+  <section class="dir" id="${d.id}" style="--stage:${d.stage}; --tag-bg:${d.tagBg}; --tag-fg:${d.tagFg}">
+    <div class="top">
+      <div class="hero">${hero(d)}</div>
+      <div class="info">
+        <span class="tag">${d.tag}</span>
+        <h2>${d.name}</h2>
+        <p class="pitch">${d.pitch}</p>
+        <dl>${d.notes.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
+        <div class="swatches">${d.colors.map(([c, n]) => `<span class="sw"><i style="background:${c}"></i>${n}</span>`).join('')}</div>
+      </div>
+    </div>
+    <div class="faces"><h3>All four faces</h3><div class="row">
+      ${flat(d, 'front', FW, 'Front')}${flat(d, 'sideA', SW, 'Lineup side')}${flat(d, 'sideB', SW, 'Second side')}${flat(d, 'back', FW, 'Back')}
+    </div></div>
+  </section>`).join('');
+</script>

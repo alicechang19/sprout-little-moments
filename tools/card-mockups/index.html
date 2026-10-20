@@ -1,0 +1,234 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Card options</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Figtree:wght@400;500;600&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..700,100;1,9..144,400..600,100&display=swap">
+<style>
+/* Static mockups of four directions for the reveal card, drawn at the app's 1440 x 900 over a real screenshot.
+   Every option shows only the name and number at first; the value, quote and story come after a tap. */
+:root {
+  --paper: #fbf9f4; --ink: #1b2046; --ink-soft: #565c7c; --leaf: #5fcb80; --leaf-deep: #2c7f47; --leaf-wash: #e1f3e5;
+  --line: rgba(27, 32, 70, 0.12); --scrim: rgba(251, 249, 244, 0.86);
+  --shadow: 0 22px 60px -24px rgba(27, 32, 70, 0.38), 0 2px 6px rgba(27, 32, 70, 0.06);
+  --display: "Fraunces", Georgia, serif; --body: "Figtree", system-ui, sans-serif; --mono: "DM Mono", ui-monospace, monospace;
+  --s: 0.5;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #eceae3; color: var(--ink); font: 400 15px/1.5 var(--body); -webkit-font-smoothing: antialiased; }
+main { max-width: 1520px; margin: 0 auto; padding: 40px 24px 80px; }
+header.page h1 { margin: 0; font: 600 40px/1 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; }
+header.page p { margin: 10px 0 0; max-width: 70ch; color: var(--ink-soft); }
+section { margin-top: 48px; }
+section h2 { margin: 0; font: 600 26px/1.1 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; }
+section h2 .tag { font: 500 12px/1 var(--mono); letter-spacing: .12em; color: var(--leaf-deep); background: var(--leaf-wash); padding: 5px 9px; border-radius: 999px; vertical-align: middle; margin-right: 10px; }
+section > p { margin: 8px 0 16px; max-width: 75ch; color: var(--ink-soft); }
+.pair { display: flex; flex-wrap: wrap; gap: 20px; }
+figure { margin: 0; }
+figcaption { font: 500 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 8px; }
+.shell { width: calc(1440px * var(--s)); height: calc(900px * var(--s)); border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 1px var(--line), 0 10px 30px -18px rgba(27,32,70,.4); }
+.frame { position: relative; width: 1440px; height: 900px; transform: scale(var(--s)); transform-origin: 0 0; background: url(scene.jpg) center / cover; overflow: hidden; }
+.frame.current { background-image: url(current.jpg); }
+@media (max-width: 1540px) { :root { --s: 0.46; } }
+@media (max-width: 1400px) { :root { --s: 0.42; } }
+@media (max-width: 1240px) { :root { --s: calc((100vw - 48px) / 1440px); } }
+
+/* shared pieces, sized like the live card */
+.no { font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
+.chip { font: 500 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: 6px 10px; border-radius: 999px; background: var(--leaf-wash); color: var(--leaf-deep); white-space: nowrap; }
+.name { margin: 0; font: 600 46px/0.98 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; letter-spacing: -0.015em; }
+.quote { margin: 0; font: italic 400 20px/1.36 var(--display); font-variation-settings: "SOFT" 100, "opsz" 36; padding-left: 16px; border-left: 3px solid var(--leaf); }
+.story { margin: 0; color: var(--ink-soft); font-size: 15px; line-height: 1.62; }
+.fine { margin: 0; font: 500 11px/1.4 var(--mono); letter-spacing: .05em; color: var(--ink-soft); opacity: .85; }
+.btn { display: inline-flex; align-items: center; gap: 8px; height: 46px; padding: 0 20px; border-radius: 999px; font: 600 15px/1 var(--body); white-space: nowrap; }
+.btn.soft { background: var(--leaf-wash); color: var(--leaf-deep); }
+.btn.primary { background: var(--ink); color: var(--paper); box-shadow: 0 10px 24px -12px rgba(27, 32, 70, .6); }
+.btn.sm { height: 38px; padding: 0 15px; font-size: 14px; }
+.btn svg { width: 12px; height: 12px; }
+.more { display: inline-flex; align-items: center; gap: 6px; font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--leaf-deep); }
+.more svg { width: 12px; height: 12px; }
+.panel { background: var(--paper); border-radius: 22px; box-shadow: var(--shadow), 0 0 0 1px var(--line); position: absolute; }
+.tap { position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 3px solid #e2483b; box-shadow: 0 0 0 6px rgba(226, 72, 59, .18); pointer-events: none; }
+
+/* A: slimmer side card */
+.a { top: 92px; right: 24px; width: 290px; padding: 20px 22px; display: grid; gap: 12px; }
+.a .name { font-size: 38px; }
+.a .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+.a.open { max-height: 780px; }
+.a .story { font-size: 14px; line-height: 1.55; }
+.a .quote { font-size: 18px; }
+
+/* B: bottom strip */
+.b { left: 24px; right: 24px; bottom: 24px; border-radius: 26px; }
+.b .row { display: flex; align-items: center; gap: 28px; padding: 18px 22px 18px 30px; }
+.b .id { display: grid; gap: 6px; }
+.b .name { font-size: 34px; }
+.b .mid { flex: 1; display: grid; gap: 8px; justify-items: start; }
+.b .acts { display: flex; gap: 10px; }
+.b .body { display: grid; grid-template-columns: auto 1fr 1.3fr; gap: 32px; align-items: start; padding: 26px 30px 4px; border-bottom: 1px solid var(--line); }
+
+/* C: name tag by the Sprout */
+.c-tag { left: 700px; top: 330px; border-radius: 18px; padding: 14px 18px 14px 18px; display: grid; gap: 6px; }
+.c-tag::before { content: ""; position: absolute; left: -9px; top: 34px; width: 18px; height: 18px; background: var(--paper); transform: rotate(45deg); box-shadow: -1px 1px 0 0 var(--line); }
+.c-tag .name { font-size: 30px; }
+.c-tag .line { display: flex; align-items: center; gap: 10px; }
+.c-tag .i { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--leaf-deep); color: var(--leaf-deep); display: grid; place-items: center; font: 600 13px/1 var(--display); font-style: italic; }
+.c-tag.open { width: 380px; gap: 12px; padding: 18px 22px; top: 230px; left: 730px; }
+.c-tag.open::before { top: 132px; }
+.c-dock { position: absolute; left: 0; right: 0; bottom: 34px; display: grid; justify-items: center; gap: 12px; }
+.c-dock .acts { display: flex; gap: 10px; padding: 8px; border-radius: 999px; background: var(--scrim); box-shadow: 0 0 0 1px var(--line); backdrop-filter: blur(8px); }
+
+/* D: collapsible bar */
+.d { top: 92px; right: 24px; width: 470px; border-radius: 24px; }
+.d .head { display: flex; align-items: center; gap: 14px; padding: 14px 14px 14px 22px; }
+.d .id { flex: 1; display: grid; gap: 5px; }
+.d .name { font-size: 30px; }
+.d .chev { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--leaf-wash); color: var(--leaf-deep); }
+.d .chev svg { width: 14px; height: 14px; }
+.d .acts { display: flex; gap: 8px; padding: 0 14px 14px 22px; align-items: center; }
+.d .acts .fine { margin-left: auto; text-align: right; max-width: 140px; }
+.d .body { display: grid; gap: 12px; padding: 4px 22px 18px; border-top: 1px solid var(--line); padding-top: 16px; }
+</style>
+
+<main>
+  <header class="page">
+    <h1>Reveal card: four directions</h1>
+    <p>Each one is drawn at the app's desktop size over the real reveal scene. At first they all show only the name and number, the two buttons and the hint line. The value, quote and story appear after a tap (the red ring marks where). Scroll to the end for today's card.</p>
+  </header>
+
+  <!-- A -->
+  <section>
+    <h2><span class="tag">A</span>Slimmer side card</h2>
+    <p>Same place as today, about three-quarters as wide and much shorter. "About Daydream" opens the quote and story inside the card, which grows downward.</p>
+    <div class="pair">
+      <figure><figcaption>At first</figcaption><div class="shell"><div class="frame">
+        <div class="panel a">
+          <span class="no">No. 01 / 05</span>
+          <h3 class="name">Daydream</h3>
+          <span class="more" data-tap>About Daydream <svg viewBox="0 0 12 12"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+          <div class="acts"><span class="btn soft sm"><svg viewBox="0 0 16 16"><path d="M4 2.8v10.4a.6.6 0 0 0 .9.5l8.3-5.2a.6.6 0 0 0 0-1L4.9 2.3a.6.6 0 0 0-.9.5Z" fill="currentColor"/></svg>Drift off</span><span class="btn primary sm">Open another box</span></div>
+          <p class="fine">Drag to turn it. Tap it for its moment.</p>
+        </div>
+      </div></div></figure>
+      <figure><figcaption>After tapping "About"</figcaption><div class="shell"><div class="frame">
+        <div class="panel a open">
+          <div style="display:flex;justify-content:space-between;align-items:center"><span class="no">No. 01 / 05</span><span class="chip">Wonder</span></div>
+          <h3 class="name">Daydream</h3>
+          <p class="quote">“The best thoughts show up when you stop looking for them.”</p>
+          <p class="story">Daydream is never in a hurry. Give it a sunny window and a quiet minute and it will drift off somewhere lovely, then come back with an idea it found along the way. Clouds are its favourite thing to watch, and it has named most of them.</p>
+          <span class="more">Less <svg viewBox="0 0 12 12"><path d="M2.5 7.5 6 4l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+          <div class="acts"><span class="btn soft sm"><svg viewBox="0 0 16 16"><path d="M4 2.8v10.4a.6.6 0 0 0 .9.5l8.3-5.2a.6.6 0 0 0 0-1L4.9 2.3a.6.6 0 0 0-.9.5Z" fill="currentColor"/></svg>Drift off</span><span class="btn primary sm">Open another box</span></div>
+          <p class="fine">Drag to turn it. Tap it for its moment.</p>
+        </div>
+      </div></div></figure>
+    </div>
+  </section>
+
+  <!-- B -->
+  <section>
+    <h2><span class="tag">B</span>Bottom strip</h2>
+    <p>A low bar along the bottom, so nothing covers the sky and the Sprout has the whole width above it. "More" lifts a panel out of the bar with the value, quote and story side by side.</p>
+    <div class="pair">
+      <figure><figcaption>At first</figcaption><div class="shell"><div class="frame">
+        <div class="panel b"><div class="row">
+          <div class="id"><span class="no">No. 01 / 05</span><h3 class="name">Daydream</h3></div>
+          <div class="mid"><span class="more" data-tap>More about Daydream <svg viewBox="0 0 12 12"><path d="M2.5 7.5 6 4l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><p class="fine">Drag to turn it. Tap it for its moment.</p></div>
+          <div class="acts"><span class="btn soft"><svg viewBox="0 0 16 16"><path d="M4 2.8v10.4a.6.6 0 0 0 .9.5l8.3-5.2a.6.6 0 0 0 0-1L4.9 2.3a.6.6 0 0 0-.9.5Z" fill="currentColor"/></svg>Drift off</span><span class="btn primary">Open another box</span></div>
+        </div></div>
+      </div></div></figure>
+      <figure><figcaption>After tapping "More"</figcaption><div class="shell"><div class="frame">
+        <div class="panel b">
+          <div class="body">
+            <span class="chip">Wonder</span>
+            <p class="quote">“The best thoughts show up when you stop looking for them.”</p>
+            <p class="story">Daydream is never in a hurry. Give it a sunny window and a quiet minute and it will drift off somewhere lovely, then come back with an idea it found along the way. Clouds are its favourite thing to watch, and it has named most of them.</p>
+          </div>
+          <div class="row">
+            <div class="id"><span class="no">No. 01 / 05</span><h3 class="name">Daydream</h3></div>
+            <div class="mid"><span class="more">Less <svg viewBox="0 0 12 12"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><p class="fine">Drag to turn it. Tap it for its moment.</p></div>
+            <div class="acts"><span class="btn soft"><svg viewBox="0 0 16 16"><path d="M4 2.8v10.4a.6.6 0 0 0 .9.5l8.3-5.2a.6.6 0 0 0 0-1L4.9 2.3a.6.6 0 0 0-.9.5Z" fill="currentColor"/></svg>Drift off</span><span class="btn primary">Open another box</span></div>
+          </div>
+        </div>
+      </div></div></figure>
+    </div>
+  </section>
+
+  <!-- C -->
+  <section>
+    <h2><span class="tag">C</span>Name tag by the Sprout</h2>
+    <p>A small tag pointing at the Sprout, like the label on a collectible, and the buttons in a pill under the stage. Tapping the tag opens it into a speech bubble with the value, quote and story.</p>
+    <div class="pair">
+      <figure><figcaption>At first</figcaption><div class="shell"><div class="frame">
+        <div class="panel c-tag">
+          <span class="no">No. 01 / 05</span>
+          <div class="line"><h3 class="name">Daydream</h3><span class="i" data-tap>i</span></div>
+        </div>
+        <div class="c-dock">
+          <div class="acts"><span class="btn soft"><svg viewBox="0 0 16 16"><path d="M4 2.8v10.4a.6.6 0 0 0 .9.5l8.3-5.2a.6.6 0 0 0 0-1L4.9 2.3a.6.6 0 0 0-.9.5Z" fill="currentColor"/></svg>Drift off</span><span class="btn primary">Open another box</span></div>
+          <p class="fine">Drag to turn it. Tap it for its moment.</p>
+        </div>
+      </div></div></figure>
+      <figure><figcaption>After tapping the tag</figcaption><div class="shell"><div class="frame">
+        <div class="panel c-tag open">
+          <div style="display:flex;justify-content:space-between;align-items:center"><span class="no">No. 01 / 05</span><span class="chip">Wonder</span></div>
+          <h3 class="name">Daydream</h3>
+          <p class="quote">“The best thoughts show up when you stop looking for them.”</p>
+          <p class="story">Daydream is never in a hurry. Give it a sunny window and a quiet minute and it will drift off somewhere lovely, then come back with an idea it found along the way. Clouds are its favourite thing to watch, and it has named most of them.</p>
+        </div>
+        <div class="c-dock">
+          <div class="acts"><span class="btn soft"><svg viewBox="0 0 16 16"><path d="M4 2.8v10.4a.6.6 0 0 0 .9.5l8.3-5.2a.6.6 0 0 0 0-1L4.9 2.3a.6.6 0 0 0-.9.5Z" fill="currentColor"/></svg>Drift off</span><span class="btn primary">Open another box</span></div>
+          <p class="fine">Drag to turn it. Tap it for its moment.</p>
+        </div>
+      </div></div></figure>
+    </div>
+  </section>
+
+  <!-- D -->
+  <section>
+    <h2><span class="tag">D</span>Collapsible card</h2>
+    <p>A compact header in the top-right corner, with the name, number and buttons in two short rows. The chevron drops the value, quote and story down beneath it, and folds them away again.</p>
+    <div class="pair">
+      <figure><figcaption>At first</figcaption><div class="shell"><div class="frame">
+        <div class="panel d">
+          <div class="head">
+            <div class="id"><span class="no">No. 01 / 05</span><h3 class="name">Daydream</h3></div>
+            <span class="chev" data-tap><svg viewBox="0 0 12 12"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          </div>
+          <div class="acts"><span class="btn soft sm"><svg viewBox="0 0 16 16"><path d="M4 2.8v10.4a.6.6 0 0 0 .9.5l8.3-5.2a.6.6 0 0 0 0-1L4.9 2.3a.6.6 0 0 0-.9.5Z" fill="currentColor"/></svg>Drift off</span><span class="btn primary sm">Open another box</span><p class="fine">Drag to turn it. Tap it for its moment.</p></div>
+        </div>
+      </div></div></figure>
+      <figure><figcaption>After tapping the chevron</figcaption><div class="shell"><div class="frame">
+        <div class="panel d">
+          <div class="head">
+            <div class="id"><span class="no">No. 01 / 05</span><h3 class="name">Daydream</h3></div>
+            <span class="chev"><svg viewBox="0 0 12 12"><path d="M2.5 7.5 6 4l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          </div>
+          <div class="acts"><span class="btn soft sm"><svg viewBox="0 0 16 16"><path d="M4 2.8v10.4a.6.6 0 0 0 .9.5l8.3-5.2a.6.6 0 0 0 0-1L4.9 2.3a.6.6 0 0 0-.9.5Z" fill="currentColor"/></svg>Drift off</span><span class="btn primary sm">Open another box</span><p class="fine">Drag to turn it. Tap it for its moment.</p></div>
+          <div class="body">
+            <span class="chip" style="justify-self:start">Wonder</span>
+            <p class="quote">“The best thoughts show up when you stop looking for them.”</p>
+            <p class="story">Daydream is never in a hurry. Give it a sunny window and a quiet minute and it will drift off somewhere lovely, then come back with an idea it found along the way. Clouds are its favourite thing to watch, and it has named most of them.</p>
+          </div>
+        </div>
+      </div></div></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="tag">Now</span>Today's card, for comparison</h2>
+    <p>The live card at the same size (the first-meeting line has already been removed).</p>
+    <div class="pair"><figure><div class="shell"><div class="frame current"></div></div></figure></div>
+  </section>
+</main>
+<script>
+// ring each tap target in frame coordinates (frames are scaled, so measure before the transform), once the fonts set the text widths
+document.fonts.ready.then(() => { for (const t of document.querySelectorAll('[data-tap]')) {
+  const frame = t.closest('.frame');
+  let x = t.offsetWidth / 2, y = t.offsetHeight / 2;
+  for (let o = t; o !== frame; o = o.offsetParent) { x += o.offsetLeft; y += o.offsetTop; }
+  const ring = document.createElement('span');
+  ring.className = 'tap';
+  ring.style.left = `${x - 17}px`; ring.style.top = `${y - 17}px`;
+  if (t.classList.contains('more')) { ring.style.width = `${t.offsetWidth + 24}px`; ring.style.left = `${x - t.offsetWidth / 2 - 12}px`; ring.style.borderRadius = '999px'; }
+  frame.append(ring);
+} });
+</script>

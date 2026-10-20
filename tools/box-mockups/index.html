@@ -1,0 +1,451 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Box directions</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=DM+Mono:wght@400;500&family=Figtree:wght@300;400;500;600&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..800,100;1,9..144,400..600,100&display=swap">
+<style>
+/* Static explorations of the Sprout blind box: four directions, each committing to its own shape, print,
+   opening and finish. Artwork is inline SVG built from the Sprout drop, so it stays on-model. */
+:root {
+  --ground: #eeebe3; --paper: #fbf9f4; --ink: #1b2046; --ink-soft: #565c7c; --line: rgba(27, 32, 70, .12);
+  --display: "Fraunces", Georgia, serif; --body: "Figtree", system-ui, sans-serif; --mono: "DM Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 15px/1.55 var(--body); -webkit-font-smoothing: antialiased; }
+main { max-width: 1240px; margin: 0 auto; padding: 48px 24px 96px; }
+.page-head h1 { margin: 0; font: 650 44px/1 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; letter-spacing: -.015em; }
+.page-head p { margin: 12px 0 0; max-width: 68ch; color: var(--ink-soft); text-wrap: pretty; }
+.jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.jump a { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink); text-decoration: none; padding: 9px 12px; border-radius: 999px; background: var(--paper); box-shadow: 0 0 0 1px var(--line); }
+
+.dir { margin-top: 56px; background: var(--paper); border-radius: 28px; box-shadow: 0 0 0 1px var(--line), 0 30px 60px -40px rgba(27,32,70,.35); overflow: hidden; }
+.top { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); }
+.hero { position: relative; min-height: 470px; display: grid; place-items: center; background: var(--stage, #f1eee6); }
+.hero svg { width: min(420px, 92%); height: auto; overflow: visible; }
+.hero .stage-label { position: absolute; left: 20px; bottom: 16px; font: 500 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: rgba(27,32,70,.5); }
+.info { padding: 36px 40px 32px; display: grid; align-content: start; gap: 18px; }
+.tag { justify-self: start; font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; padding: 7px 11px; border-radius: 999px; background: var(--tag-bg); color: var(--tag-fg); }
+.info h2 { margin: 0; font: 650 36px/1.02 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; letter-spacing: -.015em; text-wrap: balance; }
+.info .pitch { margin: 0; font-size: 17px; color: var(--ink-soft); text-wrap: pretty; }
+dl { margin: 4px 0 0; display: grid; grid-template-columns: 88px 1fr; gap: 12px 18px; }
+dt { font: 500 11px/1.9 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
+dd { margin: 0; text-wrap: pretty; }
+.swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+.sw { display: inline-flex; align-items: center; gap: 8px; font: 500 11px/1 var(--mono); letter-spacing: .04em; color: var(--ink-soft); padding: 5px 10px 5px 5px; border-radius: 999px; box-shadow: 0 0 0 1px var(--line); }
+.sw i { width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
+.feels { margin: 0; padding: 14px 16px; border-radius: 14px; background: var(--tag-bg); color: var(--tag-fg); font-size: 14px; }
+.feels b { font-weight: 600; }
+
+.lower { display: grid; grid-template-columns: 1.35fr 1fr; border-top: 1px solid var(--line); }
+.lower > div { padding: 26px 32px 30px; }
+.lower > div + div { border-left: 1px solid var(--line); }
+.lower h3 { margin: 0 0 14px; font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
+.flats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.flats figure, .steps figure { margin: 0; }
+.flats svg, .steps svg { width: 100%; height: auto; display: block; border-radius: 10px; }
+figcaption { margin-top: 8px; font: 500 10.5px/1.35 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.steps figcaption { text-transform: none; letter-spacing: .02em; font-size: 11.5px; }
+.steps figcaption b { font-weight: 500; color: var(--ink); }
+
+.today { display: grid; grid-template-columns: 1fr 1fr; align-items: center; }
+.today img { width: 100%; display: block; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 14px; }
+th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 500 11px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
+td:first-child { font-weight: 600; white-space: nowrap; }
+.dots { letter-spacing: 2px; color: #3c9a5a; }
+.dots s { color: rgba(27,32,70,.18); text-decoration: none; }
+
+@media (max-width: 900px) {
+  .top, .lower, .today { grid-template-columns: 1fr; }
+  .lower > div + div { border-left: 0; border-top: 1px solid var(--line); }
+  .hero { min-height: 380px; }
+  .info { padding: 28px 24px; }
+}
+@media (max-width: 560px) { .flats, .steps { grid-template-columns: 1fr 1fr; } }
+</style>
+
+<!-- shared artwork -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="drop" viewBox="0 0 34 42"><path d="M17 1C24 9 31 17 31 25.5A14 14 0 0 1 3 25.5C3 17 10 9 17 1Z"/></symbol>
+    <!-- a Sprout, standing: body takes currentColor -->
+    <symbol id="sprout" viewBox="0 0 60 84">
+      <path fill="currentColor" d="M30 2C41 15 52 27 52 41A22 22 0 0 1 8 41C8 27 19 15 30 2Z"/>
+      <path d="M30 14V38M30 26L23 20M30 30L37 24" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="1.6" stroke-linecap="round"/>
+      <circle cx="22.5" cy="46" r="2.6" fill="#1b2046"/><circle cx="37.5" cy="46" r="2.6" fill="#1b2046"/>
+      <path d="M25.5 52Q30 55.5 34.5 52" fill="none" stroke="#1b2046" stroke-width="1.8" stroke-linecap="round"/>
+      <rect fill="currentColor" x="27" y="60" width="6" height="13" rx="3"/>
+      <path fill="currentColor" d="M28 66C20 57 9 59 3 63C9 70 21 72 28 66Z"/><path fill="currentColor" d="M32 66C40 57 51 59 57 63C51 70 39 72 32 66Z"/>
+      <rect x="19.5" y="72" width="10" height="9" rx="3.5" fill="#a8692f"/><rect x="30.5" y="72" width="10" height="9" rx="3.5" fill="#a8692f"/>
+    </symbol>
+    <!-- the same Sprout as a flat silhouette -->
+    <symbol id="sil" viewBox="0 0 60 84">
+      <path d="M30 2C41 15 52 27 52 41A22 22 0 0 1 8 41C8 27 19 15 30 2Z"/>
+      <rect x="27" y="58" width="6" height="15" rx="3"/>
+      <path d="M28 66C20 57 9 59 3 63C9 70 21 72 28 66Z"/><path d="M32 66C40 57 51 59 57 63C51 70 39 72 32 66Z"/>
+      <rect x="19.5" y="72" width="10" height="9" rx="3.5"/><rect x="30.5" y="72" width="10" height="9" rx="3.5"/>
+    </symbol>
+    <!-- a botanical line drawing of a Sprout (for print-only directions) -->
+    <symbol id="line" viewBox="0 0 60 84">
+      <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M30 2C41 15 52 27 52 41A22 22 0 0 1 8 41C8 27 19 15 30 2Z"/>
+        <path d="M30 12V40M30 22L22 15M30 22L38 15M30 31L20 24M30 31L40 24"/>
+        <path d="M30 63V73M28 66C20 57 9 59 3 63C9 70 21 72 28 66ZM32 66C40 57 51 59 57 63C51 70 39 72 32 66Z"/>
+        <path d="M8 64L20 65M52 64L40 65"/>
+        <rect x="19.5" y="73" width="10" height="8" rx="3"/><rect x="30.5" y="73" width="10" height="8" rx="3"/>
+      </g>
+    </symbol>
+    <pattern id="kraft" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#c9a272"/><circle cx="1" cy="2" r=".55" fill="#b88f5f"/><circle cx="4" cy="5" r=".45" fill="#d6b385"/></pattern>
+    <pattern id="speck" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" fill="#c9714c"/><circle cx="2" cy="3" r=".7" fill="#b9603d"/><circle cx="6.5" cy="7" r=".5" fill="#d98a63"/></pattern>
+    <pattern id="soil" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#5c4434"/><circle cx="2" cy="2" r="1" fill="#6d5241"/><circle cx="6" cy="5" r=".8" fill="#4b372a"/><circle cx="4" cy="7" r=".6" fill="#7a5d49"/></pattern>
+    <linearGradient id="holo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffd1f0"/><stop offset=".25" stop-color="#c9f2ff"/><stop offset=".5" stop-color="#fff6b3"/><stop offset=".75" stop-color="#c7ffd6"/><stop offset="1" stop-color="#e3d1ff"/>
+    </linearGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="pouchShade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".12"/><stop offset=".18" stop-color="#000" stop-opacity="0"/><stop offset=".82" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".16"/></linearGradient>
+    <linearGradient id="potShade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".18"/><stop offset=".35" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#000" stop-opacity=".22"/></linearGradient>
+    <radialGradient id="ground" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#1b2046" stop-opacity=".22"/><stop offset="1" stop-color="#1b2046" stop-opacity="0"/></radialGradient>
+    <filter id="blur6"><feGaussianBlur stdDeviation="6"/></filter>
+  </defs>
+</svg>
+
+<main>
+  <header class="page-head">
+    <h1>Blind box: four directions</h1>
+    <p>Each direction picks its own box shape, print, opening and finish, aiming to make the box feel more collectible, more like the Sprout world, and less plain. All four keep the Sprout leaf-drop, the series name and "6 to collect". Today's box is at the end for comparison.</p>
+    <nav class="jump"><a href="#a">A · Seed packet</a><a href="#b">B · Flower pot</a><a href="#c">C · Pop cube</a><a href="#d">D · Greenhouse window</a><a href="#today">Today</a><a href="#compare">Compare</a></nav>
+  </header>
+
+  <!-- ============ A · SEED PACKET ============ -->
+  <section class="dir" id="a" style="--stage:#ece3d2; --tag-bg:#e9dcc2; --tag-fg:#4a3a22">
+    <div class="top">
+      <div class="hero">
+        <svg viewBox="0 0 420 440" role="img" aria-label="A kraft seed-packet pouch with a two-colour Sprout illustration">
+          <ellipse cx="214" cy="410" rx="150" ry="16" fill="url(#ground)"/>
+          <!-- a second packet behind, for the collectible stack -->
+          <g transform="rotate(7 300 230)">
+            <path d="M150 74 l10 -10 l10 10 l10 -10 l10 10 l10 -10 l10 10 l10 -10 l10 10 l10 -10 l10 10 l10 -10 l10 10 l10 -10 l10 10 l10 -10 l10 10 l10 -10 l10 10 l10 -10 l10 10 V392 H150Z" fill="#b99363"/>
+          </g>
+          <g transform="rotate(-4 210 230)">
+            <!-- pouch with crimped top -->
+            <path d="M92 70 l10 -10 l10 10 l10 -10 l10 10 l10 -10 l10 10 l10 -10 l10 10 l10 -10 l10 10 l10 -10 l10 10 l10 -10 l10 10 l10 -10 l10 10 l10 -10 l10 10 l10 -10 l10 10 l10 -10 l10 10 V396 H92Z" fill="url(#kraft)"/>
+            <rect x="92" y="70" width="220" height="326" fill="url(#pouchShade)"/>
+            <!-- crimp band + perforation -->
+            <rect x="92" y="70" width="220" height="16" fill="#000" opacity=".06"/>
+            <line x1="100" y1="96" x2="304" y2="96" stroke="#23402c" stroke-width="1.4" stroke-dasharray="3 4"/>
+            <path d="M304 90 l8 6 l-8 6" fill="#ece3d2"/>
+            <text x="110" y="112" font-family="DM Mono" font-size="7.5" letter-spacing="1.6" fill="#23402c">TEAR HERE TO PLANT ›</text>
+            <!-- illustration window -->
+            <rect x="110" y="122" width="184" height="170" rx="4" fill="#f1e6cf"/>
+            <g fill="#6cc583" opacity=".85"><use href="#drop" x="168" y="134" width="68" height="84" /></g>
+            <g color="#23402c"><use href="#line" x="142" y="128" width="120" height="166"/></g>
+            <!-- label -->
+            <text x="202" y="322" text-anchor="middle" font-family="Fraunces" font-weight="700" font-size="34" fill="#23402c">Sprout</text>
+            <text x="202" y="340" text-anchor="middle" font-family="DM Mono" font-size="7.5" letter-spacing="2" fill="#23402c">LITTLE MOMENTS · SERIES 01</text>
+            <line x1="122" y1="352" x2="282" y2="352" stroke="#23402c" stroke-width=".8"/>
+            <text x="122" y="366" font-family="DM Mono" font-size="7" letter-spacing="1" fill="#23402c">VARIETY: ?</text>
+            <text x="282" y="366" text-anchor="end" font-family="DM Mono" font-size="7" letter-spacing="1" fill="#23402c">1 FIGURE</text>
+            <!-- rubber stamp -->
+            <g transform="rotate(-14 270 230)" opacity=".85">
+              <circle cx="270" cy="240" r="22" fill="none" stroke="#d2603a" stroke-width="2"/>
+              <text x="270" y="236" text-anchor="middle" font-family="DM Mono" font-size="6.5" letter-spacing="1" fill="#d2603a">1 OF 6</text>
+              <text x="270" y="248" text-anchor="middle" font-family="Fraunces" font-weight="700" font-size="11" fill="#d2603a">S01</text>
+            </g>
+          </g>
+        </svg>
+        <span class="stage-label">Hero · front, on the stage</span>
+      </div>
+      <div class="info">
+        <span class="tag">Direction A</span>
+        <h2>Seed packet</h2>
+        <p class="pitch">The figure comes in a seed packet. You tear the top to "plant" it, and the back reads like growing notes. Humble and tactile, and very Sprout.</p>
+        <dl>
+          <dt>Shape</dt><dd>A flat, crimp-topped paper pouch, about 10 × 15 cm, a little puffy with the figure inside. They stack and fan out like a seed rack.</dd>
+          <dt>Print</dt><dd>Two inks on kraft: forest green line drawing plus a leaf-green fill. A hand-set label block ("Variety: Mystery") and a rubber stamp with the series number.</dd>
+          <dt>Opening</dt><dd>A tear notch and a perforated line across the top, like a real seed packet. The figure and a folded collector card slide out.</dd>
+          <dt>Finish</dt><dd>Uncoated recycled kraft, letterpress-style ink with slight texture, and a crimped heat-seal top.</dd>
+        </dl>
+        <div class="swatches"><span class="sw"><i style="background:#c9a272"></i>Kraft</span><span class="sw"><i style="background:#23402c"></i>Forest ink</span><span class="sw"><i style="background:#6cc583"></i>Leaf</span><span class="sw"><i style="background:#d2603a"></i>Stamp</span></div>
+        <p class="feels"><b>Why it feels collectible:</b> it looks like a seed collection. Each packet is a "variety", and the stamp numbers your find.</p>
+      </div>
+    </div>
+    <div class="lower">
+      <div>
+        <h3>Faces</h3>
+        <div class="flats">
+          <figure>
+            <svg viewBox="0 0 200 260"><rect width="200" height="260" fill="url(#kraft)"/><rect x="16" y="30" width="168" height="150" rx="3" fill="#f1e6cf"/><g fill="#6cc583" opacity=".85"><use href="#drop" x="70" y="38" width="60" height="74"/></g><g color="#23402c"><use href="#line" x="46" y="34" width="108" height="150"/></g><text x="100" y="212" text-anchor="middle" font-family="Fraunces" font-weight="700" font-size="28" fill="#23402c">Sprout</text><text x="100" y="230" text-anchor="middle" font-family="DM Mono" font-size="7" letter-spacing="1.8" fill="#23402c">LITTLE MOMENTS · SERIES 01</text><line x1="10" y1="16" x2="190" y2="16" stroke="#23402c" stroke-dasharray="3 4"/></svg>
+            <figcaption>Front</figcaption>
+          </figure>
+          <figure>
+            <svg viewBox="0 0 200 260"><rect width="200" height="260" fill="url(#kraft)"/><text x="18" y="38" font-family="Fraunces" font-weight="700" font-size="17" fill="#23402c">Growing notes</text><g font-family="Figtree" font-size="9.5" fill="#23402c"><text x="18" y="60">1. Tear along the top, gently.</text><text x="18" y="76">2. Find your Sprout a sunny spot.</text><text x="18" y="92">3. Tap it for its little moment.</text></g><line x1="18" y1="108" x2="182" y2="108" stroke="#23402c" stroke-width=".7"/><text x="18" y="126" font-family="DM Mono" font-size="7.5" letter-spacing="1.4" fill="#23402c">COLLECT ALL SIX</text><g font-family="Figtree" font-size="9" fill="#23402c"><g transform="translate(18 140)"><rect width="8" height="8" fill="none" stroke="#23402c"/><text x="14" y="8">01 Daydream</text></g><g transform="translate(18 156)"><rect width="8" height="8" fill="none" stroke="#23402c"/><text x="14" y="8">02 Read</text></g><g transform="translate(18 172)"><rect width="8" height="8" fill="none" stroke="#23402c"/><text x="14" y="8">03 Rest</text></g><g transform="translate(104 140)"><rect width="8" height="8" fill="none" stroke="#23402c"/><text x="14" y="8">04 Explore</text></g><g transform="translate(104 156)"><rect width="8" height="8" fill="none" stroke="#23402c"/><text x="14" y="8">05 Cheer</text></g><g transform="translate(104 172)"><rect width="8" height="8" fill="none" stroke="#23402c"/><text x="14" y="8">06 Little Light</text></g></g><g transform="rotate(-10 150 222)"><rect x="112" y="208" width="76" height="28" fill="none" stroke="#d2603a" stroke-width="1.6"/><text x="150" y="226" text-anchor="middle" font-family="DM Mono" font-size="8" letter-spacing="1" fill="#d2603a">PACKED 2026</text></g></svg>
+            <figcaption>Back · growing notes</figcaption>
+          </figure>
+          <figure>
+            <svg viewBox="0 0 200 260"><rect width="200" height="260" fill="#ece3d2"/><rect x="22" y="22" width="156" height="216" rx="6" fill="#f7f0e1" stroke="#23402c" stroke-width=".8"/><g color="#3c9a5a"><use href="#sprout" x="64" y="40" width="72" height="100"/></g><text x="100" y="168" text-anchor="middle" font-family="Fraunces" font-weight="700" font-size="20" fill="#23402c">Daydream</text><text x="100" y="186" text-anchor="middle" font-family="DM Mono" font-size="7.5" letter-spacing="1.6" fill="#23402c">VARIETY 01 · WONDER</text><text x="100" y="214" text-anchor="middle" font-family="Figtree" font-size="8.5" fill="#23402c" opacity=".75">Plant it where you daydream.</text></svg>
+            <figcaption>Inside · collector card</figcaption>
+          </figure>
+        </div>
+      </div>
+      <div>
+        <h3>Opening</h3>
+        <div class="steps">
+          <figure><svg viewBox="0 0 120 120"><rect width="120" height="120" fill="#ece3d2"/><rect x="28" y="22" width="64" height="86" fill="url(#kraft)"/><line x1="30" y1="34" x2="90" y2="34" stroke="#23402c" stroke-dasharray="2 3"/><path d="M92 30l-12 2" stroke="#d2603a" stroke-width="2" stroke-linecap="round"/><circle cx="96" cy="28" r="5" fill="none" stroke="#d2603a" stroke-width="1.6"/></svg><figcaption><b>1</b> Tear at the notch</figcaption></figure>
+          <figure><svg viewBox="0 0 120 120"><rect width="120" height="120" fill="#ece3d2"/><rect x="28" y="38" width="64" height="70" fill="url(#kraft)"/><path d="M28 34 L92 30 L92 22 L28 26Z" fill="#b99363" transform="rotate(-12 60 28)"/><rect x="40" y="26" width="40" height="30" rx="2" fill="#f7f0e1" stroke="#23402c" stroke-width=".6"/></svg><figcaption><b>2</b> Pull out the card</figcaption></figure>
+          <figure><svg viewBox="0 0 120 120"><rect width="120" height="120" fill="#ece3d2"/><rect x="24" y="64" width="54" height="46" fill="url(#kraft)" transform="rotate(-8 50 86)"/><g color="#6cc583"><use href="#sprout" x="62" y="22" width="44" height="62"/></g></svg><figcaption><b>3</b> Your Sprout sprouts</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ B · FLOWER POT ============ -->
+  <section class="dir" id="b" style="--stage:#f3e7dc; --tag-bg:#f5dccd; --tag-fg:#7a3a1f">
+    <div class="top">
+      <div class="hero">
+        <svg viewBox="0 0 420 440" role="img" aria-label="A terracotta flower-pot box with a soil lid and a paper leaf pull-tab">
+          <ellipse cx="210" cy="402" rx="128" ry="18" fill="url(#ground)"/>
+          <!-- leaf tab on the lid -->
+          <path d="M210 100 C206 70 214 48 236 34 C246 58 238 86 210 100Z" fill="#7fd395"/>
+          <path d="M210 100 C220 76 228 56 236 34" fill="none" stroke="#4f9a5c" stroke-width="1.6"/>
+          <!-- pot body -->
+          <path d="M112 142 H308 L282 396 H138Z" fill="url(#speck)"/>
+          <path d="M112 142 H308 L282 396 H138Z" fill="url(#potShade)"/>
+          <!-- rim -->
+          <path d="M98 110 H322 V150 H98Z" fill="#b9603d"/>
+          <path d="M98 110 H322 V150 H98Z" fill="url(#potShade)"/>
+          <ellipse cx="210" cy="110" rx="112" ry="16" fill="#a8532f"/>
+          <!-- soil lid -->
+          <ellipse cx="210" cy="110" rx="100" ry="12" fill="url(#soil)"/>
+          <!-- cream label band -->
+          <path d="M120 214 H300 L294 284 H126Z" fill="#f4ead8"/>
+          <text x="210" y="252" text-anchor="middle" font-family="Fraunces" font-weight="700" font-size="34" fill="#7a3a1f">Sprout</text>
+          <text x="210" y="272" text-anchor="middle" font-family="DM Mono" font-size="8" letter-spacing="2.2" fill="#7a3a1f">LITTLE MOMENTS · SERIES 01</text>
+          <!-- debossed drop -->
+          <g transform="translate(192 300)"><use href="#drop" width="36" height="44" fill="#000" opacity=".12"/><use href="#drop" x="-1" y="-1" width="36" height="44" fill="#fff" opacity=".1"/></g>
+          <text x="210" y="168" text-anchor="middle" font-family="DM Mono" font-size="8" letter-spacing="2" fill="#f4ead8" opacity=".9">PULL THE LEAF TO GROW</text>
+        </svg>
+        <span class="stage-label">Hero · the pot, closed</span>
+      </div>
+      <div class="info">
+        <span class="tag">Direction B</span>
+        <h2>Flower pot</h2>
+        <p class="pitch">The box is a little terracotta pot. Pull the paper leaf and the Sprout grows up out of the soil, so the opening is the moment.</p>
+        <dl>
+          <dt>Shape</dt><dd>A tapered cylinder with a rolled rim, about 9 cm across. A soil-coloured lid sits inside the rim with a die-cut leaf standing up from it.</dd>
+          <dt>Print</dt><dd>Mostly material, very little ink: a cream wraparound label band with the wordmark and the lineup as six drops, plus a debossed Sprout drop on the pot.</dd>
+          <dt>Opening</dt><dd>Pull the leaf. The lid lifts on a card riser and the figure rises with it, standing in its pot. The pot stays on as a display stand.</dd>
+          <dt>Finish</dt><dd>Matte speckled terracotta board, a flocked soft-touch "soil" lid, and an uncoated cream band.</dd>
+        </dl>
+        <div class="swatches"><span class="sw"><i style="background:#c9714c"></i>Terracotta</span><span class="sw"><i style="background:#5c4434"></i>Soil</span><span class="sw"><i style="background:#f4ead8"></i>Label</span><span class="sw"><i style="background:#7fd395"></i>Leaf tab</span></div>
+        <p class="feels"><b>Why it feels collectible:</b> the packaging becomes the display. Six pots on a shelf make a little garden.</p>
+      </div>
+    </div>
+    <div class="lower">
+      <div>
+        <h3>Faces</h3>
+        <div class="flats">
+          <figure>
+            <svg viewBox="0 0 200 260"><rect width="200" height="260" fill="#f3e7dc"/><path d="M14 84 H186 V176 H14Z" fill="#f4ead8"/><text x="100" y="112" text-anchor="middle" font-family="Fraunces" font-weight="700" font-size="22" fill="#7a3a1f">Sprout</text><g fill="#c9714c"><use href="#drop" x="22" y="124" width="20" height="25"/><use href="#drop" x="49" y="124" width="20" height="25"/><use href="#drop" x="76" y="124" width="20" height="25"/><use href="#drop" x="103" y="124" width="20" height="25"/><use href="#drop" x="130" y="124" width="20" height="25"/><use href="#drop" x="157" y="124" width="20" height="25"/></g><text x="100" y="166" text-anchor="middle" font-family="DM Mono" font-size="6.5" letter-spacing="1.4" fill="#7a3a1f">01 · 02 · 03 · 04 · 05 · 06</text></svg>
+            <figcaption>Label band, unrolled</figcaption>
+          </figure>
+          <figure>
+            <svg viewBox="0 0 200 260"><rect width="200" height="260" fill="#f3e7dc"/><circle cx="100" cy="130" r="86" fill="#b9603d"/><circle cx="100" cy="130" r="74" fill="url(#soil)"/><path d="M100 132 C96 104 104 84 124 72 C134 94 126 120 100 132Z" fill="#7fd395"/><text x="100" y="186" text-anchor="middle" font-family="DM Mono" font-size="8" letter-spacing="1.8" fill="#f4ead8">LIFT TO GROW</text></svg>
+            <figcaption>Lid, from above</figcaption>
+          </figure>
+          <figure>
+            <svg viewBox="0 0 200 260"><rect width="200" height="260" fill="#f3e7dc"/><circle cx="100" cy="130" r="70" fill="url(#speck)"/><circle cx="100" cy="130" r="58" fill="none" stroke="#f4ead8" stroke-width="1" opacity=".7"/><text x="100" y="158" text-anchor="middle" font-family="DM Mono" font-size="6.5" letter-spacing="1.4" fill="#f4ead8">SPR-S01 · 1 OF 6</text></svg>
+            <figcaption>Base</figcaption>
+          </figure>
+        </div>
+      </div>
+      <div>
+        <h3>Opening</h3>
+        <div class="steps">
+          <figure><svg viewBox="0 0 120 120"><rect width="120" height="120" fill="#f3e7dc"/><path d="M36 50 H84 L78 104 H42Z" fill="url(#speck)"/><rect x="32" y="42" width="56" height="10" fill="#b9603d"/><path d="M60 44 C58 30 62 20 72 14 C76 26 72 38 60 44Z" fill="#7fd395"/><path d="M76 12 l6 -6" stroke="#7a3a1f" stroke-width="2" stroke-linecap="round"/></svg><figcaption><b>1</b> Pull the leaf</figcaption></figure>
+          <figure><svg viewBox="0 0 120 120"><rect width="120" height="120" fill="#f3e7dc"/><path d="M36 62 H84 L78 110 H42Z" fill="url(#speck)"/><rect x="32" y="54" width="56" height="10" fill="#b9603d"/><ellipse cx="60" cy="38" rx="24" ry="5" fill="url(#soil)"/><rect x="56" y="40" width="8" height="18" fill="#e9dccb"/></svg><figcaption><b>2</b> The soil lid lifts</figcaption></figure>
+          <figure><svg viewBox="0 0 120 120"><rect width="120" height="120" fill="#f3e7dc"/><path d="M36 72 H84 L78 114 H42Z" fill="url(#speck)"/><rect x="32" y="64" width="56" height="10" fill="#b9603d"/><g color="#6cc583"><use href="#sprout" x="40" y="10" width="40" height="58"/></g></svg><figcaption><b>3</b> It grows out of its pot</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ C · POP CUBE ============ -->
+  <section class="dir" id="c" style="--stage:#dfeefe; --tag-bg:#d5ecff; --tag-fg:#123d6b">
+    <div class="top">
+      <div class="hero">
+        <svg viewBox="0 0 420 440" role="img" aria-label="A glossy, saturated cube box with a holographic seal and Sprout silhouettes">
+          <ellipse cx="200" cy="392" rx="150" ry="18" fill="url(#ground)"/>
+          <!-- side face (lineup) -->
+          <path d="M296 128 L362 96 V314 L296 362Z" fill="#ffd84d"/>
+          <g transform="matrix(.3 -.145 0 1 296 128)" fill="#1b2046" opacity=".9">
+            <use href="#sil" x="22" y="40" width="58" height="80"/><use href="#sil" x="118" y="40" width="58" height="80"/>
+            <use href="#sil" x="22" y="134" width="58" height="80"/><use href="#sil" x="118" y="134" width="58" height="80"/>
+          </g>
+          <!-- top face with holo seal -->
+          <path d="M62 128 L128 96 H362 L296 128Z" fill="#9edcff"/>
+          <path d="M150 104 h120 l-10 18 h-120Z" fill="url(#holo)" stroke="#fff" stroke-width="1"/>
+          <!-- front face -->
+          <rect x="62" y="128" width="234" height="234" fill="#5cc8ff"/>
+          <rect x="62" y="306" width="234" height="56" fill="#3ccf6e"/>
+          <g fill="#1b2046"><use href="#sil" x="76" y="314" width="30" height="42"/><use href="#sil" x="111" y="314" width="30" height="42"/><use href="#sil" x="146" y="314" width="30" height="42"/><use href="#sil" x="181" y="314" width="30" height="42"/><use href="#sil" x="216" y="314" width="30" height="42"/><use href="#sil" x="251" y="314" width="30" height="42"/></g>
+          <text x="179" y="176" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="52" fill="#fff" stroke="#1b2046" stroke-width="3" paint-order="stroke">SPROUT</text>
+          <text x="179" y="196" text-anchor="middle" font-family="DM Mono" font-weight="500" font-size="8.5" letter-spacing="2" fill="#1b2046">LITTLE MOMENTS · SERIES 01</text>
+          <!-- big holographic mystery drop -->
+          <use href="#drop" x="138" y="200" width="82" height="102" fill="url(#holo)" stroke="#1b2046" stroke-width=".8"/>
+          <text x="179" y="276" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="46" fill="#1b2046">?</text>
+          <!-- gloss sweep -->
+          <path d="M62 128 L120 128 L62 230Z" fill="#fff" opacity=".18"/>
+          <!-- sticker -->
+          <g transform="rotate(12 262 222)"><circle cx="262" cy="222" r="24" fill="#ff6b8b"/><text x="262" y="219" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="13" fill="#fff">6 TO</text><text x="262" y="232" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="11" fill="#fff">COLLECT</text></g>
+        </svg>
+        <span class="stage-label">Hero · glossy cube, seal on top</span>
+      </div>
+      <div class="info">
+        <span class="tag">Direction C</span>
+        <h2>Pop cube</h2>
+        <p class="pitch">An unmistakable blind-box toy: a chunky glossy cube in saturated colour, the lineup in silhouette on every side, and a holographic seal you have to break.</p>
+        <dl>
+          <dt>Shape</dt><dd>A squat cube, about 7 cm, with tuck-in top flaps. Every side is a different colour, so a row of boxes reads like a rainbow on a shelf.</dd>
+          <dt>Print</dt><dd>Bold flat colour with a chunky rounded wordmark outlined in navy. The six Sprouts appear as silhouettes in the lineup, a holographic "?" drop sits on the front, and a "6 to collect" sticker.</dd>
+          <dt>Opening</dt><dd>Peel the holographic seal across the top, open the flaps, and inside is a foil bag with the figure and a collector card.</dd>
+          <dt>Finish</dt><dd>Gloss laminate, spot-UV over the silhouettes, a holographic foil seal and drop.</dd>
+        </dl>
+        <div class="swatches"><span class="sw"><i style="background:#5cc8ff"></i>Sky</span><span class="sw"><i style="background:#3ccf6e"></i>Grass</span><span class="sw"><i style="background:#ffd84d"></i>Sun</span><span class="sw"><i style="background:linear-gradient(135deg,#ffd1f0,#c9f2ff,#fff6b3,#c7ffd6)"></i>Holo foil</span><span class="sw"><i style="background:#1b2046"></i>Ink</span></div>
+        <p class="feels"><b>Why it feels collectible:</b> it borrows the language people already know from blind-box toys: silhouettes, seal, foil and the thrill of the unknown.</p>
+      </div>
+    </div>
+    <div class="lower">
+      <div>
+        <h3>Faces</h3>
+        <div class="flats">
+          <figure>
+            <svg viewBox="0 0 200 260"><rect width="200" height="260" fill="#5cc8ff"/><rect y="196" width="200" height="64" fill="#3ccf6e"/><text x="100" y="56" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="42" fill="#fff" stroke="#1b2046" stroke-width="2.5" paint-order="stroke">SPROUT</text><use href="#drop" x="64" y="74" width="72" height="90" fill="url(#holo)" stroke="#1b2046" stroke-width=".8"/><text x="100" y="140" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="40" fill="#1b2046">?</text><g fill="#1b2046"><use href="#sil" x="10" y="206" width="28" height="40"/><use href="#sil" x="41" y="206" width="28" height="40"/><use href="#sil" x="72" y="206" width="28" height="40"/><use href="#sil" x="103" y="206" width="28" height="40"/><use href="#sil" x="134" y="206" width="28" height="40"/><use href="#sil" x="165" y="206" width="28" height="40"/></g></svg>
+            <figcaption>Front</figcaption>
+          </figure>
+          <figure>
+            <svg viewBox="0 0 200 260"><rect width="200" height="260" fill="#ffd84d"/><text x="100" y="40" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="22" fill="#1b2046">Collect all 6</text><g font-family="Baloo 2" font-weight="600" font-size="10" fill="#1b2046" text-anchor="middle"><g><use href="#sil" x="22" y="56" width="44" height="62"/><text x="44" y="132">Daydream</text></g><g><use href="#sil" x="78" y="56" width="44" height="62"/><text x="100" y="132">Read</text></g><g><use href="#sil" x="134" y="56" width="44" height="62"/><text x="156" y="132">Rest</text></g><g><use href="#sil" x="22" y="152" width="44" height="62"/><text x="44" y="228">Explore</text></g><g><use href="#sil" x="78" y="152" width="44" height="62"/><text x="100" y="228">Cheer</text></g><g><use href="#sil" x="134" y="152" width="44" height="62"/><text x="156" y="228">Little Light</text></g></g></svg>
+            <figcaption>Side · lineup silhouettes</figcaption>
+          </figure>
+          <figure>
+            <svg viewBox="0 0 200 260"><rect width="200" height="260" fill="#9edcff"/><rect x="20" y="60" width="160" height="140" fill="#5cc8ff"/><line x1="20" y1="130" x2="180" y2="130" stroke="#1b2046" stroke-opacity=".25"/><rect x="40" y="112" width="120" height="36" rx="6" fill="url(#holo)" stroke="#fff" stroke-width="2"/><text x="100" y="135" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="13" fill="#1b2046">PEEL TO MEET</text></svg>
+            <figcaption>Top · holographic seal</figcaption>
+          </figure>
+        </div>
+      </div>
+      <div>
+        <h3>Opening</h3>
+        <div class="steps">
+          <figure><svg viewBox="0 0 120 120"><rect width="120" height="120" fill="#dfeefe"/><rect x="30" y="40" width="60" height="60" fill="#5cc8ff"/><rect x="30" y="32" width="60" height="10" fill="#9edcff"/><path d="M40 34 h30 l12 -10" fill="none" stroke="url(#holo)" stroke-width="6" stroke-linecap="round"/></svg><figcaption><b>1</b> Peel the seal</figcaption></figure>
+          <figure><svg viewBox="0 0 120 120"><rect width="120" height="120" fill="#dfeefe"/><rect x="30" y="46" width="60" height="58" fill="#5cc8ff"/><path d="M30 46 L22 26 H52 L60 46Z" fill="#9edcff"/><path d="M90 46 L98 26 H68 L60 46Z" fill="#7fcff7"/><rect x="44" y="30" width="32" height="26" rx="4" fill="#c9ccd6"/></svg><figcaption><b>2</b> Open the flaps</figcaption></figure>
+          <figure><svg viewBox="0 0 120 120"><rect width="120" height="120" fill="#dfeefe"/><rect x="20" y="64" width="40" height="44" rx="6" fill="#c9ccd6"/><path d="M20 64 l6 -6 l6 6 l6 -6 l6 6 l6 -6 l6 6 l4 -4" fill="none" stroke="#aeb2bf" stroke-width="2"/><g color="#6cc583"><use href="#sprout" x="64" y="30" width="42" height="60"/></g></svg><figcaption><b>3</b> Foil bag and card</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ D · GREENHOUSE WINDOW ============ -->
+  <section class="dir" id="d" style="--stage:#e9efe9; --tag-bg:#dfeee3; --tag-fg:#24553a">
+    <div class="top">
+      <div class="hero">
+        <svg viewBox="0 0 420 440" role="img" aria-label="A tall soft white box with a leaf-shaped window onto a frosted vellum sleeve">
+          <ellipse cx="200" cy="404" rx="128" ry="16" fill="url(#ground)"/>
+          <!-- side face -->
+          <path d="M276 72 L318 52 V352 L276 382Z" fill="#e6e9e3"/>
+          <g transform="matrix(.21 -.1 0 1 276 72)" fill="none" stroke="#7bab73" stroke-width="2.4"><use href="#drop" x="40" y="80" width="50" height="62"/><use href="#drop" x="110" y="80" width="50" height="62"/><use href="#drop" x="40" y="170" width="50" height="62"/><use href="#drop" x="110" y="170" width="50" height="62"/><use href="#drop" x="40" y="260" width="50" height="62"/><use href="#drop" x="110" y="260" width="50" height="62"/></g>
+          <!-- drawer tab peeking -->
+          <path d="M318 228 l14 -6 v36 l-14 6Z" fill="#cfe5d4"/>
+          <!-- top -->
+          <path d="M96 72 L138 52 H318 L276 72Z" fill="#fbfbf8"/>
+          <!-- front -->
+          <rect x="96" y="72" width="180" height="310" fill="#f7f6f2"/>
+          <!-- vellum + blurred figure behind the window -->
+          <clipPath id="win"><path d="M186 112 C214 146 238 176 238 210 A52 52 0 0 1 134 210 C134 176 158 146 186 112Z"/></clipPath>
+          <g clip-path="url(#win)">
+            <rect x="120" y="100" width="140" height="180" fill="#dfeee3"/>
+            <g filter="url(#blur6)" color="#5cbf7a" opacity=".85"><use href="#sil" x="148" y="140" width="76" height="106" fill="#5cbf7a"/></g>
+            <rect x="120" y="100" width="140" height="180" fill="#fff" opacity=".42"/>
+          </g>
+          <path d="M186 112 C214 146 238 176 238 210 A52 52 0 0 1 134 210 C134 176 158 146 186 112Z" fill="none" stroke="#9fbf6a" stroke-width="1.6"/>
+          <path d="M186 124 V250" stroke="#9fbf6a" stroke-width=".8" opacity=".7"/>
+          <text x="186" y="304" text-anchor="middle" font-family="Fraunces" font-weight="600" font-size="30" fill="#24553a">Sprout</text>
+          <text x="186" y="322" text-anchor="middle" font-family="Figtree" font-weight="400" font-size="8.5" letter-spacing="2.6" fill="#24553a">LITTLE MOMENTS</text>
+          <line x1="146" y1="340" x2="226" y2="340" stroke="#9fbf6a" stroke-width=".8"/>
+          <text x="186" y="356" text-anchor="middle" font-family="DM Mono" font-size="7.5" letter-spacing="1.8" fill="#7b8f80">SERIES 01 · 6 TO COLLECT</text>
+          <text x="112" y="92" font-family="DM Mono" font-size="7" letter-spacing="1.4" fill="#9aa59c">NO. —</text>
+        </svg>
+        <span class="stage-label">Hero · leaf window, vellum inside</span>
+      </div>
+      <div class="info">
+        <span class="tag">Direction D</span>
+        <h2>Greenhouse window</h2>
+        <p class="pitch">A quiet, premium box with a leaf-shaped window. Through frosted vellum you can see a blurred green shape: enough to tease, never enough to know.</p>
+        <dl>
+          <dt>Shape</dt><dd>A slim upright box, about 7 × 12 cm, with a matchbox-style inner drawer. A small green tab sticks out of the side.</dd>
+          <dt>Print</dt><dd>Almost blank. Fine green foil line work for the leaf window and veins, a light serif wordmark, and the lineup as six outlined drops on the side.</dd>
+          <dt>Opening</dt><dd>Push the tab and the drawer slides out, wrapped in a vellum sleeve. Unwrap it to find out who it is. The window is the reveal.</dd>
+          <dt>Finish</dt><dd>Soft-touch white board, green foil, frosted vellum, and a blind-embossed series number.</dd>
+        </dl>
+        <div class="swatches"><span class="sw"><i style="background:#f7f6f2"></i>Soft white</span><span class="sw"><i style="background:#dfeee3"></i>Mist</span><span class="sw"><i style="background:#9fbf6a"></i>Foil</span><span class="sw"><i style="background:#24553a"></i>Deep leaf</span></div>
+        <p class="feels"><b>Why it feels collectible:</b> it's a keepsake. The window makes every box a small mystery you can almost see, and the drawer makes opening slow.</p>
+      </div>
+    </div>
+    <div class="lower">
+      <div>
+        <h3>Faces</h3>
+        <div class="flats">
+          <figure>
+            <svg viewBox="0 0 200 260"><rect width="200" height="260" fill="#f7f6f2"/><clipPath id="win2"><path d="M100 30 C124 58 144 84 144 112 A44 44 0 0 1 56 112 C56 84 76 58 100 30Z"/></clipPath><g clip-path="url(#win2)"><rect x="40" y="20" width="120" height="150" fill="#dfeee3"/><g filter="url(#blur6)"><use href="#sil" x="66" y="56" width="68" height="94" fill="#5cbf7a"/></g><rect x="40" y="20" width="120" height="150" fill="#fff" opacity=".42"/></g><path d="M100 30 C124 58 144 84 144 112 A44 44 0 0 1 56 112 C56 84 76 58 100 30Z" fill="none" stroke="#9fbf6a" stroke-width="1.4"/><text x="100" y="196" text-anchor="middle" font-family="Fraunces" font-weight="600" font-size="24" fill="#24553a">Sprout</text><text x="100" y="214" text-anchor="middle" font-family="Figtree" font-size="7.5" letter-spacing="2.4" fill="#24553a">LITTLE MOMENTS</text></svg>
+            <figcaption>Front · window</figcaption>
+          </figure>
+          <figure>
+            <svg viewBox="0 0 200 260"><rect width="200" height="260" fill="#eef1ec"/><g fill="none" stroke="#9fbf6a" stroke-width="1.3"><use href="#drop" x="36" y="34" width="34" height="42"/><use href="#drop" x="130" y="34" width="34" height="42"/><use href="#drop" x="36" y="110" width="34" height="42"/><use href="#drop" x="130" y="110" width="34" height="42"/><use href="#drop" x="36" y="186" width="34" height="42"/><use href="#drop" x="130" y="186" width="34" height="42"/></g><g font-family="Figtree" font-size="8.5" fill="#24553a" text-anchor="middle"><text x="53" y="92">Daydream</text><text x="147" y="92">Read</text><text x="53" y="168">Rest</text><text x="147" y="168">Explore</text><text x="53" y="244">Cheer</text><text x="147" y="244">Little Light</text></g></svg>
+            <figcaption>Side · foil lineup</figcaption>
+          </figure>
+          <figure>
+            <svg viewBox="0 0 200 260"><rect width="200" height="260" fill="#f7f6f2"/><text x="20" y="44" font-family="Fraunces" font-weight="600" font-size="15" fill="#24553a">Inside this box</text><g font-family="Figtree" font-size="9" fill="#4e6656"><text x="20" y="66">One Sprout, chosen at random</text><text x="20" y="80">from the six in this series.</text><text x="20" y="104">Slide the drawer out slowly.</text><text x="20" y="118">Unwrap the vellum to meet it.</text></g><line x1="20" y1="214" x2="180" y2="214" stroke="#9fbf6a" stroke-width=".8"/><text x="20" y="234" font-family="DM Mono" font-size="7" letter-spacing="1.4" fill="#7b8f80">SPR-S01</text><text x="180" y="234" text-anchor="end" font-family="DM Mono" font-size="7" letter-spacing="1.4" fill="#7b8f80">SERIES 01</text></svg>
+            <figcaption>Back</figcaption>
+          </figure>
+        </div>
+      </div>
+      <div>
+        <h3>Opening</h3>
+        <div class="steps">
+          <figure><svg viewBox="0 0 120 120"><rect width="120" height="120" fill="#e9efe9"/><rect x="38" y="18" width="44" height="88" fill="#f7f6f2" stroke="#d6dcd4"/><path d="M82 56 h8 v14 h-8" fill="#cfe5d4"/><path d="M98 63 h-8" stroke="#24553a" stroke-width="2" stroke-linecap="round"/></svg><figcaption><b>1</b> Push the tab</figcaption></figure>
+          <figure><svg viewBox="0 0 120 120"><rect width="120" height="120" fill="#e9efe9"/><rect x="22" y="18" width="44" height="88" fill="#f7f6f2" stroke="#d6dcd4"/><rect x="52" y="24" width="44" height="76" fill="#dfeee3" stroke="#c4d8c9"/><rect x="56" y="30" width="36" height="64" fill="#fff" opacity=".6"/></svg><figcaption><b>2</b> The drawer slides out</figcaption></figure>
+          <figure><svg viewBox="0 0 120 120"><rect width="120" height="120" fill="#e9efe9"/><path d="M18 86 L54 74 L58 104 L22 112Z" fill="#fff" opacity=".7"/><g color="#6cc583"><use href="#sprout" x="58" y="24" width="44" height="62"/></g></svg><figcaption><b>3</b> Unwrap the vellum</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TODAY ============ -->
+  <section class="dir today" id="today" style="--tag-bg:#e7e4dc; --tag-fg:#3d4160">
+    <img src="today.jpg" alt="Today's box: a cream carton with a green tear strip and a leaf-drop question mark">
+    <div class="info">
+      <span class="tag">Today</span>
+      <h2>The cream carton</h2>
+      <p class="pitch">A tall cream carton with a green tear strip, a leaf-drop "?" on the front, and the lineup and moments on the sides.</p>
+      <dl>
+        <dt>Keep</dt><dd>The tear strip is a great interaction in 3D. Any direction can keep a version of it (A's perforation, C's seal).</dd>
+        <dt>Gap</dt><dd>Little colour or illustration, and nothing that says "toy". It reads more like a tea box than a collectible.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============ COMPARE ============ -->
+  <section class="dir" id="compare" style="padding: 30px 36px 24px">
+    <h2 style="margin:0; font: 650 28px/1 var(--display); font-variation-settings: 'SOFT' 100, 'opsz' 144;">Side by side</h2>
+    <table>
+      <thead><tr><th>Direction</th><th>Collectible</th><th>Sprout world</th><th>Calm</th><th>Fit with the 3D tear-to-open</th><th>Watch out for</th></tr></thead>
+      <tbody>
+        <tr><td>A · Seed packet</td><td class="dots">●●●<s>●●</s></td><td class="dots">●●●●●</td><td class="dots">●●●●<s>●</s></td><td>Great: the tear line moves to the top of the pouch</td><td>A soft pouch is harder to animate in 3D than a box</td></tr>
+        <tr><td>B · Flower pot</td><td class="dots">●●●●<s>●</s></td><td class="dots">●●●●●</td><td class="dots">●●●<s>●●</s></td><td>New: pull the leaf, the Sprout rises (no tearing)</td><td>The most new 3D work: a round pot, a lifting lid, a riser</td></tr>
+        <tr><td>C · Pop cube</td><td class="dots">●●●●●</td><td class="dots">●●<s>●●●</s></td><td class="dots">●<s>●●●●</s></td><td>Good: peel the seal, flaps open</td><td>Loudest; could drift from the gentle Sprout voice</td></tr>
+        <tr><td>D · Greenhouse window</td><td class="dots">●●●●<s>●</s></td><td class="dots">●●●<s>●●</s></td><td class="dots">●●●●●</td><td>Good: a sliding drawer is easy to animate</td><td>Quiet on a shelf; relies on the window to sell it</td></tr>
+      </tbody>
+    </table>
+  </section>
+</main>

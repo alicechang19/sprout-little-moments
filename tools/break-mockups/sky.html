@@ -1,0 +1,199 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sky break</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Figtree:wght@400;500;600&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..700,100;1,9..144,400..600,100&display=swap">
+<style>
+/* Options A + C from index.html together: the break takes the whole screen, washed in the Sprout's own sky, and the
+   timer is that sky's sun (or moon, or star) crossing from one side to the other. Drawn by the script at the bottom. */
+:root {
+  --paper: #fbf9f4; --ink: #1b2046; --ink-soft: #565c7c; --leaf: #5fcb80; --leaf-deep: #2c7f47; --leaf-wash: #e1f3e5;
+  --line: rgba(27, 32, 70, 0.12);
+  --display: "Fraunces", Georgia, serif; --body: "Figtree", system-ui, sans-serif; --mono: "DM Mono", ui-monospace, monospace;
+  --s: 0.5; --sp: 0.62;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #eceae3; color: var(--ink); font: 400 15px/1.5 var(--body); -webkit-font-smoothing: antialiased; }
+main { max-width: 1520px; margin: 0 auto; padding: 40px 24px 80px; }
+header.page h1 { margin: 0; font: 600 40px/1 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; }
+header.page p { margin: 10px 0 0; max-width: 72ch; color: var(--ink-soft); }
+header.page a { color: var(--leaf-deep); }
+section { margin-top: 48px; }
+section h2 { margin: 0; font: 600 26px/1.1 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; }
+section > p { margin: 8px 0 16px; max-width: 75ch; color: var(--ink-soft); }
+.pair { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+figure { margin: 0; }
+figcaption { font: 500 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 8px; }
+.shell { width: calc(1440px * var(--s)); height: calc(900px * var(--s)); border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 1px var(--line), 0 10px 30px -18px rgba(27,32,70,.4); }
+.shell.phone { width: calc(390px * var(--sp)); height: calc(844px * var(--sp)); border-radius: 22px; }
+.grid { display: grid; grid-template-columns: repeat(3, calc(1440px * var(--g))); gap: 20px; --g: 0.32; }
+.grid .shell { width: calc(1440px * var(--g)); height: calc(900px * var(--g)); }
+.grid .frame { transform: scale(var(--g)); }
+@media (max-width: 1540px) { :root { --s: 0.46; } .grid { --g: 0.3; } }
+@media (max-width: 1400px) { :root { --s: 0.42; } .grid { --g: 0.27; } }
+@media (max-width: 1240px) { :root { --s: calc((100vw - 48px) / 1440px); } .grid { grid-template-columns: 1fr; --g: calc((100vw - 48px) / 1440px); } }
+
+.frame { position: relative; width: 1440px; height: 900px; transform: scale(var(--s)); transform-origin: 0 0; background: url(../card-mockups/scene.jpg) center / cover; overflow: hidden; color: var(--fg); }
+.phone .frame { width: 390px; height: 844px; transform: scale(var(--sp)); background-position: 38% center; }
+.veil { position: absolute; inset: 0; background: linear-gradient(180deg, var(--top), var(--bottom)); opacity: .9; }
+.blur { position: absolute; inset: 0; backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); }
+.frame svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.copy { position: absolute; left: 0; right: 0; display: grid; justify-items: center; text-align: center; }
+.eyebrow { margin: 0; font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.title { margin: 14px 0 0; font: 600 34px/1.05 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; letter-spacing: -0.01em; }
+.clock { font: 400 168px/0.9 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.task { margin: 0; font: italic 400 24px/1.38 var(--display); font-variation-settings: "SOFT" 100, "opsz" 36; max-width: 31ch; text-wrap: balance; }
+.note { margin: 0; font-size: 15px; line-height: 1.45; color: var(--soft); }
+.link { font: 500 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--soft); text-decoration: underline; text-underline-offset: 4px; }
+.close { margin-top: 10px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; height: 50px; margin-top: 8px; padding: 0 26px; border-radius: 999px; font: 600 16px/1 var(--body); background: var(--fg); color: var(--btn-ink); box-shadow: 0 10px 24px -12px rgba(27, 32, 70, .6); }
+
+/* back with the Sprout: the timer sits where "Open another box" was */
+.scene { background: url(../card-mockups/scene.jpg) center / cover; }
+.namecard { position: absolute; top: 24px; right: 24px; padding: 14px 20px 16px; border-radius: 18px; background: rgba(251, 249, 244, 0.78); box-shadow: 0 0 0 1px var(--line); display: grid; gap: 6px; color: var(--ink); }
+.namecard .no { font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
+.namecard b { font: 600 30px/1 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; }
+.dock { position: absolute; left: 0; right: 0; bottom: 30px; display: grid; justify-items: center; gap: 12px; color: var(--ink); }
+.pill { display: flex; align-items: center; gap: 10px; height: 52px; padding: 0 20px 0 14px; border-radius: 999px; background: var(--paper); box-shadow: 0 10px 24px -14px rgba(27, 32, 70, .55), 0 0 0 1px var(--line); }
+.pill svg { position: static; width: 40px; height: 24px; }
+.pill b { font: 500 16px/1 var(--mono); font-variant-numeric: tabular-nums; }
+.pill span { font: 500 14px/1 var(--body); color: var(--ink-soft); }
+.dock .hint { margin: 0; font: 500 12px/1.4 var(--mono); letter-spacing: .06em; color: rgba(27, 32, 70, 0.62); text-align: center; }
+.phone .namecard { top: 14px; right: 16px; padding: 10px 14px 11px; border-radius: 15px; gap: 5px; }
+.phone .namecard .no { font-size: 10.5px; }
+.phone .namecard b { font-size: 22px; }
+.phone .dock { bottom: 26px; padding: 0 16px; }
+.phone .scene { background-position: 30% center; } /* keeps the Sprout centred in a phone-shaped crop of the desktop shot */
+.phone .title { font-size: 28px; }
+.phone .clock { font-size: 104px; }
+.phone .task { font-size: 20px; max-width: 26ch; }
+.phone .note { font-size: 14px; max-width: 30ch; }
+</style>
+
+<main>
+  <header class="page">
+    <h1>Options A + C together</h1>
+    <p>The break takes over the whole screen, washed in the Sprout's own sky, and the timer is that sky's sun crossing from one side to the other. It rises when the break starts and sets when it's done, and then the next box comes out. Earlier options are on <a href="./">the options page</a>.</p>
+  </header>
+
+  <section>
+    <h2>Daydream, from the click to back with your Sprout</h2>
+    <p>"Open another box" brings up the break with the sun on the left horizon and one button, "Start my break". Once it's started, "Close for now" takes you back to the Sprout you just unboxed, and a small timer replaces the "Open another box" button. Tap the timer to bring the break back. When it runs out, the next box comes out wherever you are.</p>
+    <div class="pair" id="moments"></div>
+  </section>
+
+  <section>
+    <h2>On a phone</h2>
+    <p>The same layout stacked: the arc and clock up top, the task below the horizon. The timer under the Sprout fits the same spot.</p>
+    <div class="pair" id="phones"></div>
+  </section>
+
+  <section>
+    <h2>Every Sprout gets its own sky</h2>
+    <p>The colours come from each Sprout's scene. Rest gets a moon with stars, and Little Light gets a star on its dusk sky. The rest have a sun, with something small from their own scene: clouds for Daydream, birds for Read, hills for Explore, sparkles for Cheer.</p>
+    <div class="grid" id="all"></div>
+  </section>
+</main>
+
+<script>
+const SPROUTS = {
+  daydream: { name: 'Daydream', title: 'Time to daydream', sky: ['#d9e3f7', '#f5f1f7'], body: 'sun', extra: 'clouds',
+    task: 'Get a glass of water, find a window or step outside, and look at the sky. Let your mind wander wherever it likes.' },
+  read: { name: 'Read', title: 'Time to read', sky: ['#f4e3cd', '#fbf5ec'], body: 'sun', extra: 'birds', sun: ['#efa94e', '#ffd9a0'],
+    task: 'Read something just for fun: a few pages of a book, a poem, or that article you saved for later.' },
+  rest: { name: 'Rest', title: 'Time to rest', sky: ['#d3d0ec', '#ede9f4'], body: 'moon', extra: 'stars',
+    task: 'Step away from your screen. Close your eyes, take a few slow breaths, and let your shoulders drop.' },
+  explore: { name: 'Explore', title: 'Time to explore', sky: ['#e5edd0', '#f7f6ea'], body: 'sun', extra: 'hills',
+    task: 'Take a short walk somewhere a little different, and notice one thing you’ve never noticed before.' },
+  cheer: { name: 'Cheer', title: 'Time to cheer someone on', sky: ['#f7ddd5', '#fcf2ec'], body: 'sun', extra: 'sparkles', sun: ['#f39a7c', '#ffd0bf'],
+    task: 'Send a teammate a quick thank-you, or celebrate one of their wins out loud.' },
+  light: { name: 'Little Light', title: 'Time to find a little light', sky: ['#20264a', '#3b4170'], body: 'star', extra: 'stars', dark: true,
+    task: 'Step into some daylight or open the blinds, and think of one bright spot in your day.' },
+};
+
+const sparkle = (x, y, r, fill) => `<path d="M${x} ${y - r}Q${x + r * .18} ${y - r * .18} ${x + r} ${y}Q${x + r * .18} ${y + r * .18} ${x} ${y + r}Q${x - r * .18} ${y + r * .18} ${x - r} ${y}Q${x - r * .18} ${y - r * .18} ${x} ${y - r}Z" fill="${fill}"/>`;
+const cloud = (x, y, k) => `<g fill="#fff" opacity=".8"><ellipse cx="${x}" cy="${y}" rx="${46 * k}" ry="${17 * k}"/><ellipse cx="${x + 26 * k}" cy="${y - 11 * k}" rx="${30 * k}" ry="${20 * k}"/><ellipse cx="${x - 22 * k}" cy="${y - 6 * k}" rx="${22 * k}" ry="${14 * k}"/></g>`;
+
+let moons = 0; // each moon needs its own mask id
+/** The sky drawing: horizon, the dotted path the sun takes, the part it has crossed, and the sun itself. */
+function sky(s, { W, H, cx, cy, r, p }) {
+  const fg = s.dark ? '#eef0f7' : '#1b2046';
+  const [core, glow] = s.sun || (s.body === 'moon' ? ['#8b84cf', '#ffffff'] : s.body === 'star' ? ['#ffe9a8', '#ffe9a8'] : ['#f8cf6a', '#ffe7a6']);
+  const L = Math.PI * r, a = Math.PI * (1 - p);
+  const x = cx + r * Math.cos(a), y = cy - r * Math.sin(a);
+  const arc = `M${cx - r} ${cy} A${r} ${r} 0 0 1 ${cx + r} ${cy}`;
+  const k = W < 600 ? 0.55 : W / 1440; // phones get a bigger sun than a straight scale-down would give
+  let extra = '';
+  if (s.extra === 'clouds') extra = cloud(W * .14, H * .2, k * 1.4) + cloud(W * .86, H * .3, k * 1.1) + cloud(W * .7, H * .1, k * .8);
+  if (s.extra === 'birds') extra = [[.2, .22, 1], [.24, .19, .8], [.8, .26, .9]].map(([bx, by, bk]) => `<path d="M${W * bx - 12 * bk * k * 1.6} ${H * by}q${6 * bk * k * 1.6} ${-7 * bk * k * 1.6} ${12 * bk * k * 1.6} 0q${6 * bk * k * 1.6} ${-7 * bk * k * 1.6} ${12 * bk * k * 1.6} 0" fill="none" stroke="${fg}" stroke-opacity=".35" stroke-width="2.2" stroke-linecap="round"/>`).join('');
+  if (s.extra === 'stars') extra = [[.1, .14, 7], [.2, .32, 4], [.33, .12, 5], [.62, .08, 4], [.78, .2, 7], [.9, .1, 4], [.86, .38, 5], [.12, .48, 4]].map(([sx, sy, sr]) => sparkle(W * sx, H * sy, sr * k * 1.4, s.dark ? '#ffffff' : '#ffffff')).join('');
+  if (s.extra === 'sparkles') extra = [[.16, .2, 9, '#f39a7c'], [.24, .36, 5, '#5fcb80'], [.82, .16, 7, '#f6c453'], [.88, .34, 10, '#f39a7c'], [.74, .4, 5, '#5fcb80']].map(([sx, sy, sr, c]) => sparkle(W * sx, H * sy, sr * k * 1.5, c)).join('');
+  if (s.extra === 'hills') extra = `<path d="M0 ${cy} Q${W * .12} ${cy - 70 * k} ${W * .26} ${cy - 20 * k} T${W * .5} ${cy - 10 * k} T${W * .78} ${cy - 40 * k} T${W} ${cy - 20 * k} V${cy}Z" fill="#9fcf7a" opacity=".45"/>`;
+  let body;
+  if (s.body === 'moon') {
+    const id = `moon-${++moons}`;
+    body = `<mask id="${id}"><circle cx="${x}" cy="${y}" r="${26 * k}" fill="#fff"/><circle cx="${x + 12 * k}" cy="${y - 7 * k}" r="${22 * k}" fill="#000"/></mask>
+      <circle cx="${x}" cy="${y}" r="${48 * k}" fill="${glow}" opacity=".55"/><circle cx="${x}" cy="${y}" r="${26 * k}" fill="${core}" mask="url(#${id})"/>`;
+  }
+  else if (s.body === 'star') body = `<circle cx="${x}" cy="${y}" r="${50 * k}" fill="${glow}" opacity=".18"/><circle cx="${x}" cy="${y}" r="${28 * k}" fill="${glow}" opacity=".25"/>${sparkle(x, y, 22 * k, core)}`;
+  else body = `<circle cx="${x}" cy="${y}" r="${50 * k}" fill="${glow}" opacity=".5"/><circle cx="${x}" cy="${y}" r="${26 * k}" fill="${core}"/>`;
+  return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true">
+    ${extra}
+    <line x1="0" y1="${cy}" x2="${W}" y2="${cy}" stroke="${fg}" stroke-opacity=".12" stroke-width="1.5"/>
+    <path d="${arc}" fill="none" stroke="${fg}" stroke-opacity=".22" stroke-width="${3 * Math.max(k, .8)}" stroke-dasharray="1 ${12 * Math.max(k, .8)}" stroke-linecap="round"/>
+    <path d="${arc}" fill="none" stroke="${core}" stroke-width="${4 * Math.max(k, .8)}" stroke-linecap="round" stroke-dasharray="${L}" stroke-dashoffset="${L * (1 - p)}"/>
+    ${body}
+  </svg>`;
+}
+
+const clock = (left) => `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`;
+
+/** One break frame. `left` is seconds left; null means the break hasn't started. */
+function frame(id, left, phone = false) {
+  const s = SPROUTS[id];
+  const p = left === null ? 0 : 1 - left / 300;
+  const vars = s.dark
+    ? `--fg:#eef0f7;--soft:rgba(238,240,247,.7);--accent:#93e6ab;--btn-ink:#1b2046;`
+    : `--fg:#1b2046;--soft:#565c7c;--accent:#2c7f47;--btn-ink:#fbf9f4;`;
+  const style = `${vars}--top:${s.sky[0]};--bottom:${s.sky[1]};`;
+  const end = 'Your next box will be ready when the five minutes are up.';
+  // before the break starts there's only the button; "Close for now" comes once it's running
+  const action = left === null ? '<span class="btn">Start my break</span>' : '<span class="link close">Close for now</span>';
+  const note = left === null ? 'Take five minutes away from the screen.' : end;
+  const g = phone
+    ? { W: 390, H: 844, cx: 195, cy: 420, r: 165, p }
+    : { W: 1440, H: 900, cx: 720, cy: 584, r: 430, p };
+  const top = phone
+    ? `<div class="copy" style="top:118px"><p class="eyebrow">Before your next box</p><h3 class="title">${s.title}</h3></div>
+       <div class="copy" style="top:316px"><span class="clock">${clock(left ?? 300)}</span></div>
+       <div class="copy" style="top:470px;gap:18px;padding:0 28px"><p class="task">${s.task}</p><p class="note">${note}</p>${action}</div>`
+    : `<div class="copy" style="top:206px"><p class="eyebrow">Before your next box</p><h3 class="title">${s.title}</h3></div>
+       <div class="copy" style="top:328px"><span class="clock">${clock(left ?? 300)}</span></div>
+       <div class="copy" style="top:614px;gap:14px"><p class="task">${s.task}</p><p class="note">${note}</p>${action}</div>`;
+  return `<div class="shell${phone ? ' phone' : ''}"><div class="frame" style="${style}"><div class="blur"></div><div class="veil"></div>${sky(s, g)}${top}</div></div>`;
+}
+
+/** Back with the Sprout after "Close for now": a small sky arc and the time left, where the button was. */
+function closed(id, left, phone = false) {
+  const s = SPROUTS[id];
+  const p = 1 - left / 300, r = 17, L = Math.PI * r, a = Math.PI * (1 - p);
+  const core = (s.sun || ['#f8cf6a'])[0];
+  const arc = `M3 21 A${r} ${r} 0 0 1 37 21`;
+  const mini = `<svg viewBox="0 0 40 24" aria-hidden="true">
+    <path d="${arc}" fill="none" stroke="#1b2046" stroke-opacity=".2" stroke-width="2" stroke-dasharray="1 4" stroke-linecap="round"/>
+    <path d="${arc}" fill="none" stroke="${core}" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="${L}" stroke-dashoffset="${L * (1 - p)}"/>
+    <circle cx="${20 + r * Math.cos(a)}" cy="${21 - r * Math.sin(a)}" r="4.5" fill="${core}"/></svg>`;
+  return `<div class="shell${phone ? ' phone' : ''}"><div class="frame scene">
+    <div class="namecard"><span class="no">No. 01 / 06</span><b>${s.name}</b></div>
+    <div class="dock"><span class="pill">${mini}<b>${clock(left)}</b><span>until your next box</span></span>
+      <p class="hint">Tap the timer to see your break. Tap the Sprout for its moment.</p></div>
+  </div></div>`;
+}
+
+const fig = (cap, html) => `<figure><figcaption>${cap}</figcaption>${html}</figure>`;
+document.getElementById('moments').innerHTML =
+  fig('Before you start', frame('daydream', null)) + fig('2:18 left', frame('daydream', 138)) + fig('After "Close for now"', closed('daydream', 138));
+document.getElementById('phones').innerHTML =
+  fig('Before you start', frame('daydream', null, true)) + fig('2:18 left', frame('daydream', 138, true)) + fig('After "Close for now"', closed('daydream', 138, true)) + fig('Little Light, 2:18 left', frame('light', 138, true));
+document.getElementById('all').innerHTML = Object.keys(SPROUTS).map((id) => fig(SPROUTS[id].name, frame(id, 138))).join('');
+</script>

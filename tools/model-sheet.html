@@ -1,0 +1,38 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Sprout model sheet</title>
+<style>html,body{margin:0;height:100%;background:#f3f0e8}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+const r = new THREE.WebGLRenderer({ antialias: true });
+r.setPixelRatio(devicePixelRatio); r.setSize(innerWidth, innerHeight);
+r.toneMapping = THREE.NeutralToneMapping;
+document.body.append(r.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0xf3f0e8);
+scene.environment = new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.5;
+scene.add(new THREE.HemisphereLight(0xffffff, 0xd8cfc0, 1.2));
+const key = new THREE.DirectionalLight(0xfff4e6, 2.2); key.position.set(3, 6, 5); scene.add(key);
+const cam = new THREE.PerspectiveCamera(30, innerWidth / innerHeight, 0.1, 100);
+const params = new URLSearchParams(location.search);
+const ids = (params.get('ids') || 'daydream,read,rest,explore,cheer,light').split(',');
+const spacing = 2.3;
+const zoom = +(params.get('zoom') || 1), ty = +(params.get('ty') || 1), tx = +(params.get('tx') || 0), el = params.get('el');
+const dist = (ids.length * 2.2 + 3) / zoom;
+cam.position.set(tx, ty + (el == null ? 0.6 / zoom : Math.sin(+el) * dist), el == null ? dist : Math.cos(+el) * dist);
+const c = new OrbitControls(cam, r.domElement); c.target.set(tx, ty, 0);
+const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
+// ids ending in .glb load from models/src/ (imported models); others are the archived kit Sprouts
+ids.forEach((id, i) => loader.load((id.endsWith('.glb') ? `../models/src/${id}` : `../models/archive/sprout-${id}.glb`) + `?t=${Date.now()}`, (g) => {
+  g.scene.position.x = (i - (ids.length - 1) / 2) * spacing;
+  g.scene.rotation.y = +(params.get('ry') || 0);
+  g.scene.scale.setScalar(+(params.get('s') || 1));
+  scene.add(g.scene);
+}));
+(function loop() { requestAnimationFrame(loop); c.update(); r.render(scene, cam); })();
+</script>

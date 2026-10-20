@@ -1,0 +1,82 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Sprout rig preview</title>
+<style>html,body{margin:0;height:100%;background:#f3f0e8}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+<script type="module">
+// Local check of an imported Sprout's rig, loaded exactly as the app loads it.
+//   ?id=cheer          which Sprout
+//   &weights=1         colour by bone: arm_L red, arm_R blue, head yellow, legs purple, hips green
+//   &pose=<t>          freeze at time t (seconds) instead of playing
+//   &moment=1          play the tap moment on a loop
+//   &mp=<0..1>         freeze the tap moment at this point (with &pose for the idle underneath)
+//   &shut=<0..1>       hold painted eyes this far closed
+//   &flip=<0..1>       hold a book's page this far through turning
+//   &red=1             paint the turning page red, to see it against the book
+//   &ry, &zoom, &tx, &ty, &el   camera (el: elevation in radians, negative looks up)
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { loadImported } from '../src/kit.js';
+import { Rig, MOMENT_SECONDS, PAGE_SECONDS } from '../src/rig.js';
+
+const q = new URLSearchParams(location.search);
+const id = q.get('id') || 'cheer';
+const r = new THREE.WebGLRenderer({ antialias: true });
+r.setPixelRatio(devicePixelRatio); r.setSize(innerWidth, innerHeight);
+r.toneMapping = THREE.NeutralToneMapping;
+document.body.append(r.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0xf3f0e8);
+scene.environment = new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.5;
+scene.add(new THREE.HemisphereLight(0xffffff, 0xd8cfc0, 1.2));
+const key = new THREE.DirectionalLight(0xfff4e6, 2.2); key.position.set(3, 6, 5); scene.add(key);
+const zoom = +(q.get('zoom') || 1), ty = +(q.get('ty') || 1), tx = +(q.get('tx') || 0), el = +(q.get('el') || 0.05);
+const cam = new THREE.PerspectiveCamera(30, innerWidth / innerHeight, 0.1, 100);
+cam.position.set(tx, ty + Math.sin(el) * 6 / zoom, Math.cos(el) * 6 / zoom);
+const c = new OrbitControls(cam, r.domElement); c.target.set(tx, ty, 0);
+
+// refresh the browser cache so a rebuilt rig shows up without a hard reload
+await Promise.all(['-model.js', '-color.webp', '-normal.webp', '-orm.webp'].map((f) => fetch(`../models/web/${id}${f}`, { cache: 'reload' })));
+const template = await loadImported(id, new GLTFLoader(), '../', `?v=${Date.now()}`);
+const rig = new Rig(id, template);
+rig.object.rotation.y = +(q.get('ry') || 0);
+scene.add(rig.object);
+
+if (q.get('red')) rig.n.book_page?.traverse((o) => { if (o.isMesh) o.material = new THREE.MeshStandardMaterial({ color: 0xff3030, side: THREE.DoubleSide }); });
+if (q.get('weights')) {
+  const PAL = [[0.3, 0.75, 0.35], [0.55, 0.3, 0.7], [0.55, 0.3, 0.7], [0.55, 0.3, 0.7], [0.55, 0.3, 0.7], [0.9, 0.2, 0.2], [0.2, 0.35, 0.9], [0.95, 0.85, 0.2]];
+  rig.object.traverse((o) => {
+    if (!o.isSkinnedMesh) return;
+    const names = o.skeleton.bones.map((b) => b.name);
+    const order = ['hips', 'leg_L', 'shin_L', 'leg_R', 'shin_R', 'arm_L', 'arm_R', 'head'];
+    const remap = names.map((nm) => order.indexOf(nm));
+    const si = o.geometry.attributes.skinIndex, sw = o.geometry.attributes.skinWeight;
+    const col = new Float32Array(si.count * 3);
+    for (let i = 0; i < si.count; i++) for (let j = 0; j < 4; j++) {
+      const p = PAL[remap[si.getComponent(i, j)]] || [0, 0, 0], w = sw.getComponent(i, j);
+      for (let k = 0; k < 3; k++) col[i * 3 + k] += p[k] * w;
+    }
+    o.geometry = o.geometry.clone();
+    o.geometry.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    o.material = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.8 });
+  });
+}
+
+const clock = new THREE.Clock();
+const freeze = q.get('pose');
+window.__ready = true;
+window.__rig = rig;
+(function loop() {
+  requestAnimationFrame(loop);
+  const dt = Math.min(clock.getDelta(), 0.05);
+  if (freeze != null) { rig.time = +freeze - dt; rig.moment = null; }
+  if (q.get('moment') && !rig.busy) rig.play();
+  if (q.get('mp') != null) { const dur = MOMENT_SECONDS[id]; rig.moment = { start: rig.time + dt - +q.get('mp') * dur, dur }; }
+  if (q.get('flip') != null) rig.pageFlipAt = rig.time + dt - +q.get('flip') * PAGE_SECONDS;
+  rig.update(dt, 1);
+  if (q.get('shut') != null) { for (const l of rig.lids) l.value = +q.get('shut'); for (const l of rig.lidShapes) l.mesh.morphTargetInfluences[l.i] = +q.get('shut'); }
+  c.update(); r.render(scene, cam);
+})();
+</script>

@@ -1,0 +1,294 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Break options</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Figtree:wght@400;500;600&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..700,100;1,9..144,400..600,100&display=swap">
+<style>
+/* Static mockups of directions for the five-minute break dialog (src/unlock.js), drawn at the app's 1440 x 900
+   over a real screenshot. Every option is frozen at the same moment: a Daydream break with 2:18 left. */
+:root {
+  --paper: #fbf9f4; --ink: #1b2046; --ink-soft: #565c7c; --leaf: #5fcb80; --leaf-deep: #2c7f47; --leaf-wash: #e1f3e5;
+  --line: rgba(27, 32, 70, 0.12);
+  --shadow: 0 22px 60px -24px rgba(27, 32, 70, 0.38), 0 2px 6px rgba(27, 32, 70, 0.06);
+  --display: "Fraunces", Georgia, serif; --body: "Figtree", system-ui, sans-serif; --mono: "DM Mono", ui-monospace, monospace;
+  --sky-top: #d9e3f7; --sky-bottom: #f5f1f7; /* Daydream's sky */
+  --s: 0.5;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #eceae3; color: var(--ink); font: 400 15px/1.5 var(--body); -webkit-font-smoothing: antialiased; }
+main { max-width: 1520px; margin: 0 auto; padding: 40px 24px 80px; }
+header.page h1 { margin: 0; font: 600 40px/1 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; }
+header.page p { margin: 10px 0 0; max-width: 70ch; color: var(--ink-soft); }
+section { margin-top: 48px; }
+section h2 { margin: 0; font: 600 26px/1.1 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; }
+section h2 .tag { font: 500 12px/1 var(--mono); letter-spacing: .12em; color: var(--leaf-deep); background: var(--leaf-wash); padding: 5px 9px; border-radius: 999px; vertical-align: middle; margin-right: 10px; }
+section > p { margin: 8px 0 6px; max-width: 75ch; color: var(--ink-soft); }
+section > ul { margin: 0 0 16px; padding-left: 20px; max-width: 75ch; color: var(--ink-soft); }
+.pair { display: flex; flex-wrap: wrap; gap: 20px; }
+figure { margin: 0; }
+figcaption { font: 500 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 8px; }
+.shell { width: calc(1440px * var(--s)); height: calc(900px * var(--s)); border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 1px var(--line), 0 10px 30px -18px rgba(27,32,70,.4); }
+.frame { position: relative; width: 1440px; height: 900px; transform: scale(var(--s)); transform-origin: 0 0; background: url(../card-mockups/scene.jpg) center / cover; overflow: hidden; }
+@media (max-width: 1540px) { :root { --s: 0.46; } }
+@media (max-width: 1400px) { :root { --s: 0.42; } }
+@media (max-width: 1240px) { :root { --s: calc((100vw - 48px) / 1440px); } }
+
+/* shared pieces, sized like the live dialog */
+.backdrop { position: absolute; inset: 0; background: rgba(27, 32, 70, 0.28); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+.panel { position: absolute; background: var(--paper); border-radius: 22px; box-shadow: var(--shadow), 0 0 0 1px var(--line); }
+.center { left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.eyebrow { margin: 0; font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--leaf-deep); }
+.title { margin: 0; font: 600 28px/1.08 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; letter-spacing: -0.01em; }
+.prompt { margin: 0; font: italic 400 19px/1.4 var(--display); font-variation-settings: "SOFT" 100, "opsz" 36; padding-left: 14px; border-left: 3px solid var(--leaf); }
+.note { margin: 0; font-size: 14px; line-height: 1.45; color: var(--ink-soft); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 22px; border-radius: 999px; font: 600 15px/1 var(--body); white-space: nowrap; }
+.btn.ghost { box-shadow: inset 0 0 0 1.5px var(--line); }
+.btn.soft { background: var(--leaf-wash); color: var(--leaf-deep); }
+.btn.sm { height: 36px; padding: 0 15px; font-size: 13.5px; }
+.actions { display: flex; justify-content: center; }
+.time { font: 500 32px/1 var(--mono); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+.ring { position: relative; width: 148px; height: 148px; justify-self: center; }
+.ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring circle { fill: none; stroke-width: 7; }
+.ring .track { stroke: var(--leaf-wash); }
+.ring .fill { stroke: var(--leaf); stroke-linecap: round; }
+.ring .time { position: absolute; inset: 0; display: grid; place-items: center; }
+.link { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); text-decoration: underline; text-underline-offset: 4px; }
+.namecard { position: absolute; top: 24px; right: 24px; padding: 14px 20px 16px; border-radius: 18px; background: rgba(251, 249, 244, 0.78); box-shadow: 0 0 0 1px var(--line); display: grid; gap: 6px; }
+.namecard .no { font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
+.namecard b { font: 600 30px/1 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; }
+
+/* A: today */
+.a { width: 460px; padding: 24px 24px 20px; display: grid; gap: 14px; }
+
+/* B: a window onto the Sprout's sky */
+.b { width: 460px; overflow: hidden; }
+.b .sky { position: relative; height: 236px; background: linear-gradient(180deg, var(--sky-top), var(--sky-bottom)); }
+.b .sky svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.b .sky .time { position: absolute; left: 0; right: 0; bottom: 30px; text-align: center; font: 600 52px/1 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; letter-spacing: -0.01em; }
+.b .sky .left { position: absolute; left: 0; right: 0; bottom: 12px; text-align: center; font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
+.b .body { padding: 22px 26px 22px; display: grid; gap: 12px; text-align: center; justify-items: center; }
+.b .task { margin: 0; font: italic 400 19px/1.4 var(--display); font-variation-settings: "SOFT" 100, "opsz" 36; max-width: 34ch; }
+
+/* C: side by side, with the task in steps */
+.c { width: 780px; padding: 30px 32px 24px; display: grid; grid-template-columns: 230px 1fr; column-gap: 34px; row-gap: 22px; align-items: center; }
+.c .ring { width: 210px; height: 210px; }
+.c .ring circle { stroke-width: 8; }
+.c .ring .time { font-size: 42px; }
+.c .ring .time small { display: block; margin-top: 8px; font: 500 10.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); text-align: center; }
+.c .side { display: grid; gap: 14px; }
+.c ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.c li { display: flex; align-items: center; gap: 12px; font-size: 16px; line-height: 1.3; }
+.c li .box { flex: none; width: 24px; height: 24px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--line); display: grid; place-items: center; }
+.c li.done .box { background: var(--leaf); box-shadow: none; }
+.c li.done span:last-child { color: var(--ink-soft); text-decoration: line-through; text-decoration-color: rgba(27, 32, 70, .3); }
+.c li .box svg { width: 12px; height: 12px; }
+.c .foot { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; padding-top: 16px; border-top: 1px solid var(--line); }
+
+/* D: the whole screen steps away */
+.d-veil { position: absolute; inset: 0; background: color-mix(in srgb, var(--sky-bottom) 70%, transparent); backdrop-filter: blur(26px) saturate(1.1); -webkit-backdrop-filter: blur(26px) saturate(1.1); }
+.d { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 18px; text-align: center; }
+.d .big { font: 400 196px/0.9 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.d .bar { width: 340px; height: 4px; border-radius: 4px; background: rgba(27, 32, 70, .1); overflow: hidden; }
+.d .bar i { display: block; width: 54%; height: 100%; background: var(--leaf); border-radius: 4px; }
+.d .task { margin: 10px 0 0; font: italic 400 26px/1.35 var(--display); font-variation-settings: "SOFT" 100, "opsz" 36; max-width: 30ch; }
+.d .note { margin-top: 2px; }
+.d .link { margin-top: 26px; }
+
+/* E: the leaf fills like it's being watered */
+.e { width: 420px; padding: 28px 28px 22px; display: grid; gap: 12px; justify-items: center; text-align: center; }
+.e .leaf { width: 132px; height: 164px; margin-bottom: 2px; }
+.e .time { font-size: 26px; color: var(--leaf-deep); }
+.e .title { margin-top: 6px; }
+.e .task { margin: 0; font: italic 400 18px/1.42 var(--display); font-variation-settings: "SOFT" 100, "opsz" 36; max-width: 32ch; }
+.e .note { max-width: 36ch; }
+
+/* F: no dialog; the break waits in the dock and the Sprout stays out */
+.f-dock { position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%); display: grid; justify-items: center; gap: 12px; }
+.pill { display: flex; align-items: center; gap: 14px; padding: 8px 10px 8px 8px; border-radius: 999px; background: var(--paper); box-shadow: var(--shadow), 0 0 0 1px var(--line); }
+.pill .mini { position: relative; width: 52px; height: 52px; }
+.pill .mini svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.pill .mini circle { fill: none; stroke-width: 5; }
+.pill .mini .track { stroke: var(--leaf-wash); }
+.pill .mini .fill { stroke: var(--leaf); stroke-linecap: round; }
+.pill .mini b { position: absolute; inset: 0; display: grid; place-items: center; font: 500 13px/1 var(--mono); font-variant-numeric: tabular-nums; }
+.pill .words { display: grid; gap: 3px; padding-right: 8px; }
+.pill .words b { font: 600 17px/1.1 var(--display); font-variation-settings: "SOFT" 100, "opsz" 144; }
+.pill .words span { font-size: 13.5px; color: var(--ink-soft); }
+.pill .chev { width: 36px; height: 36px; border-radius: 50%; background: var(--leaf-wash); display: grid; place-items: center; color: var(--leaf-deep); }
+.pill .chev svg { width: 12px; height: 12px; }
+.f-pop { width: 400px; padding: 20px 22px 18px; display: grid; gap: 12px; position: static; }
+.f-pop .head { display: flex; justify-content: space-between; align-items: baseline; }
+.f-pop .head .time { font-size: 20px; color: var(--leaf-deep); }
+.f-dock .hint { margin: 0; font: 500 12px/1.4 var(--mono); letter-spacing: .06em; color: rgba(27, 32, 70, 0.62); }
+</style>
+
+<main>
+  <header class="page">
+    <h1>Five-minute break: options</h1>
+    <p>Directions for the break before each new box. Each one is frozen at the same moment, a Daydream break with 2:18 left, over the Daydream scene at the app's 1440 × 900. The copy is today's copy.</p>
+  </header>
+
+  <!-- ============================================================ A -->
+  <section>
+    <h2><span class="tag">NOW</span>Today’s card</h2>
+    <p>For comparison: a centred card with the task, a ring timer and a note.</p>
+    <div class="pair">
+      <figure><figcaption>During the break</figcaption><div class="shell"><div class="frame">
+        <div class="backdrop"></div>
+        <div class="panel center a">
+          <p class="eyebrow">Before your next box</p>
+          <h3 class="title">Time to daydream</h3>
+          <p class="prompt">Get a glass of water, find a window or step outside, and look at the sky. Let your mind wander wherever it likes.</p>
+          <div class="ring"><svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="54"/><circle class="fill" cx="60" cy="60" r="54" stroke-dasharray="339.3" stroke-dashoffset="183.2"/></svg><span class="time">2:18</span></div>
+          <p class="note">You can close this and come back. The timer keeps going, and your next box comes out when it’s done.</p>
+          <div class="actions"><span class="btn ghost">Close for now</span></div>
+        </div>
+      </div></div></figure>
+    </div>
+  </section>
+
+  <!-- ============================================================ B -->
+  <section>
+    <h2><span class="tag">A</span>A window onto the Sprout’s sky</h2>
+    <p>The top of the card is the Sprout's own sky, and the timer is a sun crossing it. Each Sprout gets its own: Little Light's would be the dusk sky with a moon, Rest's a night sky.</p>
+    <ul><li>Ties the break to the Sprout more than anything else here.</li><li>Needs a small sky drawing for each of the six.</li></ul>
+    <div class="pair">
+      <figure><figcaption>During the break</figcaption><div class="shell"><div class="frame">
+        <div class="backdrop"></div>
+        <div class="panel center b">
+          <div class="sky">
+            <svg viewBox="0 0 460 236" aria-hidden="true">
+              <g fill="#fff" opacity=".85"><ellipse cx="78" cy="62" rx="34" ry="14"/><ellipse cx="102" cy="54" rx="24" ry="16"/><ellipse cx="380" cy="96" rx="30" ry="12"/><ellipse cx="398" cy="89" rx="19" ry="12"/></g>
+              <path d="M60 200 A170 170 0 0 1 400 200" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"/>
+              <path d="M60 200 A170 170 0 0 1 400 200" fill="none" stroke="#f3c35a" stroke-width="3" stroke-linecap="round" stroke-dasharray="534" stroke-dashoffset="245.6"/>
+              <circle cx="251.4" cy="31.4" r="26" fill="#ffe7a6" opacity=".55"/>
+              <circle cx="251.4" cy="31.4" r="15" fill="#f8cf6a"/>
+            </svg>
+            <span class="time">2:18</span>
+            <span class="left">left to daydream</span>
+          </div>
+          <div class="body">
+            <h3 class="title">Time to daydream</h3>
+            <p class="task">Get a glass of water, find a window or step outside, and look at the sky. Let your mind wander wherever it likes.</p>
+            <p class="note">Your next box comes out when the sun sets.</p>
+            <div class="actions" style="margin-top:4px"><span class="btn ghost">Close for now</span></div>
+          </div>
+        </div>
+      </div></div></figure>
+    </div>
+  </section>
+
+  <!-- ============================================================ C -->
+  <section>
+    <h2><span class="tag">B</span>Side by side, in small steps</h2>
+    <p>A wider card with the timer on the left and the task split into two or three steps people can tick off. Ticking is just for fun; the box still waits for the timer.</p>
+    <ul><li>Easier to follow away from the screen, and ticking feels like doing something.</li><li>Each task needs rewriting as steps. Too wide for phones, so it stacks there.</li></ul>
+    <div class="pair">
+      <figure><figcaption>During the break</figcaption><div class="shell"><div class="frame">
+        <div class="backdrop"></div>
+        <div class="panel center c">
+          <div class="ring"><svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="54"/><circle class="fill" cx="60" cy="60" r="54" stroke-dasharray="339.3" stroke-dashoffset="183.2"/></svg><span class="time"><span>2:18<small>left</small></span></span></div>
+          <div class="side">
+            <p class="eyebrow">Before your next box</p>
+            <h3 class="title">Time to daydream</h3>
+            <ol>
+              <li class="done"><span class="box"><svg viewBox="0 0 12 12"><path d="M2.5 6.2 5 8.6l4.6-5" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Get a glass of water</span></li>
+              <li class="done"><span class="box"><svg viewBox="0 0 12 12"><path d="M2.5 6.2 5 8.6l4.6-5" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Find a window or step outside</span></li>
+              <li><span class="box"></span><span>Look at the sky and let your mind wander</span></li>
+            </ol>
+          </div>
+          <div class="foot">
+            <p class="note">The timer keeps going if you close this. Your next box comes out when it’s done.</p>
+            <span class="btn ghost sm">Close for now</span>
+          </div>
+        </div>
+      </div></div></figure>
+    </div>
+  </section>
+
+  <!-- ============================================================ D -->
+  <section>
+    <h2><span class="tag">C</span>The whole screen steps away</h2>
+    <p>No card. The scene fades into a soft blur of the Sprout's sky with a big, quiet clock. It reads as "go away from the screen" more than "fill this in".</p>
+    <ul><li>The calmest option, and the most obvious that it's a break.</li><li>Hides the Sprout completely while you wait.</li></ul>
+    <div class="pair">
+      <figure><figcaption>During the break</figcaption><div class="shell"><div class="frame">
+        <div class="d-veil"></div>
+        <div class="d">
+          <p class="eyebrow">Daydream break</p>
+          <span class="big">2:18</span>
+          <span class="bar"><i></i></span>
+          <p class="task">Get a glass of water, find a window or step outside, and look at the sky. Let your mind wander.</p>
+          <p class="note">Your next box will be waiting when you’re back.</p>
+          <span class="link">Close for now</span>
+        </div>
+      </div></div></figure>
+    </div>
+  </section>
+
+  <!-- ============================================================ E -->
+  <section>
+    <h2><span class="tag">D</span>Water the leaf</h2>
+    <p>The ring becomes the Sprout leaf, and it fills up as the break goes on, like it's being watered. When it's full, the next box comes out. The card is narrower and centred.</p>
+    <ul><li>The most Sprout-like timer, and it uses the leaf shape that's already on the loading screen.</li><li>The leaf is less exact than a ring for seeing how much time is left, so the time sits under it.</li></ul>
+    <div class="pair">
+      <figure><figcaption>During the break</figcaption><div class="shell"><div class="frame">
+        <div class="backdrop"></div>
+        <div class="panel center e">
+          <svg class="leaf" viewBox="0 0 34 42" aria-hidden="true">
+            <defs>
+              <clipPath id="leaf-clip"><path d="M17 1C24 9 31 17 31 25.5A14 14 0 0 1 3 25.5C3 17 10 9 17 1Z"/></clipPath>
+            </defs>
+            <path d="M17 1C24 9 31 17 31 25.5A14 14 0 0 1 3 25.5C3 17 10 9 17 1Z" fill="#e1f3e5"/>
+            <g clip-path="url(#leaf-clip)">
+              <path d="M0 19.6 Q4.25 18.4 8.5 19.6 T17 19.6 T25.5 19.6 T34 19.6 V42 H0Z" fill="#5fcb80"/>
+              <path d="M17 39.5V14M17 26l-6-5.5M17 21.5l5.5-5" fill="none" stroke="#2c7f47" stroke-opacity=".35" stroke-width="1" stroke-linecap="round"/>
+            </g>
+            <path d="M17 1C24 9 31 17 31 25.5A14 14 0 0 1 3 25.5C3 17 10 9 17 1Z" fill="none" stroke="#5fcb80" stroke-width="1.2"/>
+          </svg>
+          <span class="time">2:18</span>
+          <h3 class="title">Time to daydream</h3>
+          <p class="task">Get a glass of water, find a window or step outside, and look at the sky. Let your mind wander wherever it likes.</p>
+          <p class="note">When the leaf is full, your next box comes out. You can close this; the timer keeps going.</p>
+          <div class="actions" style="margin-top:6px"><span class="btn ghost">Close for now</span></div>
+        </div>
+      </div></div></figure>
+    </div>
+  </section>
+
+  <!-- ============================================================ F -->
+  <section>
+    <h2><span class="tag">E</span>A pill in the dock, no dialog</h2>
+    <p>No dialog at all. The break sits where "Open another box" was, so you can keep turning and tapping the Sprout while you wait. Tap the pill to see the full task.</p>
+    <ul><li>Never blocks the Sprout, and there's nothing to close.</li><li>Easier to ignore, so it's less of a nudge to actually step away.</li></ul>
+    <div class="pair">
+      <figure><figcaption>During the break</figcaption><div class="shell"><div class="frame">
+        <div class="namecard"><span class="no">No. 01 / 06</span><b>Daydream</b></div>
+        <div class="f-dock">
+          <div class="pill">
+            <span class="mini"><svg viewBox="0 0 52 52"><circle class="track" cx="26" cy="26" r="22"/><circle class="fill" cx="26" cy="26" r="22" stroke-dasharray="138.2" stroke-dashoffset="74.6"/></svg><b>2:18</b></span>
+            <span class="words"><b>Daydream break</b><span>Look at the sky and let your mind wander</span></span>
+            <span class="chev"><svg viewBox="0 0 12 12"><path d="M2.5 7.5 6 4l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          </div>
+          <p class="hint">Your next box comes out when the break is done.</p>
+        </div>
+      </div></div></figure>
+      <figure><figcaption>After tapping the pill</figcaption><div class="shell"><div class="frame">
+        <div class="namecard"><span class="no">No. 01 / 06</span><b>Daydream</b></div>
+        <div class="f-dock">
+          <div class="panel f-pop">
+            <div class="head"><p class="eyebrow">Before your next box</p><span class="time">2:18</span></div>
+            <h3 class="title">Time to daydream</h3>
+            <p class="prompt">Get a glass of water, find a window or step outside, and look at the sky. Let your mind wander wherever it likes.</p>
+          </div>
+          <div class="pill">
+            <span class="mini"><svg viewBox="0 0 52 52"><circle class="track" cx="26" cy="26" r="22"/><circle class="fill" cx="26" cy="26" r="22" stroke-dasharray="138.2" stroke-dashoffset="74.6"/></svg><b>2:18</b></span>
+            <span class="words"><b>Daydream break</b><span>Look at the sky and let your mind wander</span></span>
+            <span class="chev"><svg viewBox="0 0 12 12"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          </div>
+        </div>
+      </div></div></figure>
+    </div>
+  </section>
+</main>

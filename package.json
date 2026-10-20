@@ -1,0 +1,19 @@
+{
+  "name": "sprout-little-moments",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node tools/dev-server.mjs",
+    "build:models": "node tools/build-models.mjs",
+    "blend:make": "node tools/blend.mjs make",
+    "blend:export": "node tools/blend.mjs export"
+  },
+  "devDependencies": {
+    "@gltf-transform/core": "^4.0.0",
+    "@gltf-transform/extensions": "^4.0.0",
+    "@gltf-transform/functions": "^4.0.0",
+    "meshoptimizer": "^0.22.0",
+    "sharp": "^0.35.5",
+    "three": "0.170.0"
+  }
+}

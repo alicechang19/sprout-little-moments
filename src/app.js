@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { SERIES, BY_ID, SKY, LIGHTS } from './data.js';
-import { animate, tickTweens, ease, wait, motionScale, reducedMotion, isDark, storage, clamp, bell, glowTexture, testParams } from './util.js';
+import { animate, tickTweens, ease, wait, motionScale, reducedMotion, isDark, storage, clamp, bell, glowTexture, testParams, local } from './util.js';
 import { needsAct, setupBreaks, showBreak } from './unlock.js';
 import { BlindBox, BOX, loadBoxArt } from './box.js';
 import { Rig } from './rig.js';
@@ -14,7 +14,11 @@ import { skyLook, watchSky } from './sky.js';
 import { Fx, beamMaterial, flood, floodable } from './fx.js';
 import * as sound from './sound.js';
 import { collectionCard, polaroidCard, pngOf, previewShare, closeShare } from './share.js';
+import { inject } from '@vercel/analytics';
 const STEP_HALF = Math.PI / SLOTS;
+
+// Vercel Web Analytics. On this computer it loads the debug script, which logs to the console instead of counting visits.
+inject({ mode: local ? 'development' : 'production' });
 
 // The experience: a ring of blind boxes turns on a plinth in the real sky. Spin it, choose the one at the front,
 // tear it open, meet the Sprout inside. Once all six are found they gather in the garden for a photo.

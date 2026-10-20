@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 // The URL switches for testing (?sprout, ?tell, ?break, ?sky, ?demo, ?debug) only work on this computer,
 // so nobody can use them on the live site to pick a Sprout or skip a break.
-const local = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
+export const local = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
 export const testParams = new URLSearchParams(local ? location.search : '');
 
 export const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');

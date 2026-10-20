@@ -3,3 +3,5 @@ node_modules/
 models/src/
 models/archive/
 models/blend/
+.vercel/
+.env*

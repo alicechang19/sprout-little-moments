@@ -1,0 +1,3 @@
+# Keep GitHub's language bar about the game itself: the mockups are design notes, and models/web is exported.
+tools/*-mockups/** linguist-documentation
+models/web/** linguist-generated

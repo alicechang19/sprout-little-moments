@@ -31,7 +31,7 @@ them to pick a Sprout or skip a break.
 
 | | |
 |---|---|
-| `src/` | the experience: `app.js` runs it; `box.js`, `carousel.js`, `garden.js`, `envs.js`, `fx.js` build the scene; `unlock.js` is the five-minute break; `share.js` draws the share cards; `sound.js` synthesises every sound |
+| `src/` | the experience: `app.js` runs it; `box.js`, `carousel.js`, `garden.js`, `envs.js`, `fx.js` build the scene; `unlock.js` is the five-minute break; `share.js` draws the share cards; `sound.js` synthesises every sound; `styles.css` styles the page |
 | `api/pick.js` | the box draw and its odds |
 | `models/web/` | what the page loads: each Sprout as a base64 GLB module plus its textures, and the box stills |
 | `tools/` | the asset pipeline, the local dev server, and design mockups |
